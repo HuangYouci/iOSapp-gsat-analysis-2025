@@ -10,6 +10,8 @@ import GoogleMobileAds
 
 struct AboutView: View {
     
+    
+    
     // --------------- //
     // EnvironmentObject
     @EnvironmentObject var data: UserDef
