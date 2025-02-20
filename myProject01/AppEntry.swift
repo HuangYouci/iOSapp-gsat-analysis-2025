@@ -16,6 +16,7 @@ struct myProject01App: App {
     // StateObject
     @StateObject private var data = UserDef()
     @StateObject private var deptList = DeptDataModel()
+    @StateObject private var iapManager = IAPManager.shared
     // Binding
     // State
     // --------------- //
@@ -29,6 +30,7 @@ struct myProject01App: App {
     }
     
     var body: some Scene {
+        
         @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
         
         WindowGroup {
@@ -39,8 +41,9 @@ struct myProject01App: App {
                 ContentView()
                     .environmentObject(data)
                     .environmentObject(deptList)
+                    .environmentObject(iapManager)
             }
-        }
+        }        
     }
     
 }

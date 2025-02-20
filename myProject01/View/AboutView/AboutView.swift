@@ -100,13 +100,31 @@ struct AboutView: View {
                                 Text("購買付費方案支持開發以獲得無限次分析次數")
                                 Spacer()
                                 
-                                Button(role: .none){
-                                    data.userpurchased = true
-                                    data.analyzeCount = 2415919104
-                                } label: {
-                                    Text("購買")
-                                }
-                                .buttonStyle(.borderedProminent)
+                                Button {
+                                            // 執行購買操作
+                                            Task {
+                                                guard let product = IAPManager.shared.product(for: "myProject01_userpurchased") else {
+                                                    print("找不到商品")
+                                                    return
+                                                }
+                                                
+                                                do {
+                                                    try await IAPManager.shared.purchase(product)
+                                                    // 購買成功後更新使用者狀態
+                                                    await MainActor.run {
+                                                        data.userpurchased = true
+                                                        data.analyzeCount = 2415919104
+                                                    }
+                                                } catch {
+                                                    print("購買失敗: \(error)")
+                                                    // 可以在這裡加入錯誤提示
+                                                }
+                                            }
+                                        } label: {
+                                            Text("購買")
+                                        }
+                                        .buttonStyle(.borderedProminent)
+                                
                             }
                             
                         }

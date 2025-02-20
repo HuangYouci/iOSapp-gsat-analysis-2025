@@ -1,14 +1,6 @@
-//
-//  ContentView.swift
-//  myProject01
-//
-//  Created by 黃宥琦 on 2025/1/25.
-//
-
 import SwiftUI
 
 struct ContentView: View {
-    
     // --------------- //
     // EnvironmentObject
     // StateObject
@@ -18,7 +10,6 @@ struct ContentView: View {
     // State
     @State private var selectedTab = 0
     // --------------- //
-    
     
     var body: some View {
         TabView(selection: $selectedTab){
@@ -49,6 +40,30 @@ struct ContentView: View {
                     Text("關於")
                 }
                 .tag(2)
+        }
+        .onAppear {
+            Task {
+                // 先檢查初始化狀態
+                print("正在檢查 IAP 狀態...")
+                if IAPManager.shared.products.isEmpty {
+                    print("等待商品載入...")
+                    await IAPManager.shared.fetchProducts()
+                }
+                
+                if let errorMessage = IAPManager.shared.errorMessage {
+                    print("IAP 錯誤: \(errorMessage)")
+                }
+                
+                if IAPManager.shared.isPurchased("myProject01_userpurchased") {
+                    print("檢測到已購買狀態")
+                    await MainActor.run {
+                        data.userpurchased = true
+                        data.analyzeCount = 2415919104
+                    }
+                } else {
+                    print("未檢測到購買狀態")
+                }
+            }
         }
     }
 }
