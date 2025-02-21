@@ -26,6 +26,8 @@ struct AboutView: View {
     @State var favoriteDept: [deptListModel] = []
     @State private var rewardAd: RewardedAd?
     @State private var isAdLoaded = false
+    @State private var showPurchaseError = false
+    @State private var purchaseErrorMessage = ""
     // --------------- //
     
     func loadRewardedAd() {
@@ -103,29 +105,33 @@ struct AboutView: View {
                                 Spacer()
                                 
                                 Button {
-                                            // 執行購買操作
-                                            Task {
-                                                guard let product = IAPManager.shared.product(for: "myProject01_userpurchased") else {
-                                                    print("找不到商品")
-                                                    return
-                                                }
-                                                
-                                                do {
-                                                    try await IAPManager.shared.purchase(product)
-                                                    // 購買成功後更新使用者狀態
-                                                    await MainActor.run {
-                                                        data.userpurchased = true
-                                                        data.analyzeCount = 2415919104
-                                                    }
-                                                } catch {
-                                                    print("購買失敗: \(error)")
-                                                    // 可以在這裡加入錯誤提示
-                                                }
-                                            }
-                                        } label: {
-                                            Text("購買")
+                                    // 執行購買操作
+                                    Task {
+                                        guard let product = IAPManager.shared.product(for: "myProject01_userpurchased") else {
+                                            purchaseErrorMessage = "商品未載入"
+                                            showPurchaseError = true
+                                            return
                                         }
-                                        .buttonStyle(.borderedProminent)
+                                        
+                                        do {
+                                            try await IAPManager.shared.purchase(product)
+                                            await MainActor.run {
+                                                data.userpurchased = true
+                                                data.analyzeCount = 2415919104
+                                            }
+                                        } catch {
+                                            await MainActor.run {
+                                                purchaseErrorMessage = error.localizedDescription
+                                                showPurchaseError = true
+                                            }
+                                        }
+                                        
+                                    }
+                                    
+                                } label: {
+                                    Text("購買")
+                                }
+                                .buttonStyle(.borderedProminent)
                                 
                             }
                             
@@ -133,6 +139,8 @@ struct AboutView: View {
                         .padding(10)
                         .background(Color(.secondarySystemGroupedBackground).opacity(0.5))
                         .cornerRadius(10)
+                        
+                        if !purchaseErrorMessage.isEmpty { Text(purchaseErrorMessage).foregroundStyle(Color(.red)) }
                         
                         Divider()
                         
@@ -272,12 +280,17 @@ struct AboutView: View {
             }
             
         }
-        .onAppear { 
-            favoriteDept = deptList.departments.filter { dept in
-                data.favoriteDept.contains(dept.id)
+            .onAppear { 
+                favoriteDept = deptList.departments.filter { dept in
+                    data.favoriteDept.contains(dept.id)
+                }
+                loadRewardedAd()
             }
-            loadRewardedAd()
-        }
+            .alert("購買失敗", isPresented: $showPurchaseError) {
+                    Button("確定", role: .cancel) { }
+                } message: {
+                    Text(purchaseErrorMessage)
+            }
         
     }
 }
