@@ -42,7 +42,7 @@ struct ShareImgView: View {
                 }
                 Spacer()
                 HStack{
-                    if department.passChance >= 80 {
+                    if department.passChance >= 0.8 {
                         VStack{
                             Text("保底志願")
                                 .font(.title2)
@@ -65,7 +65,7 @@ struct ShareImgView: View {
                         )
                         .cornerRadius(15)
                         .shadow(radius: 5)
-                    } else if department.passChance >= 60 {
+                    } else if department.passChance >= 0.6 {
                         VStack{
                             Text("安全志願")
                                 .font(.title2)
@@ -88,7 +88,7 @@ struct ShareImgView: View {
                         )
                         .cornerRadius(15)
                         .shadow(radius: 5)
-                    } else if department.passChance >= 40 {
+                    } else if department.passChance >= 0.4 {
                         VStack{
                             Text("一般志願")
                                 .font(.title2)
@@ -111,7 +111,7 @@ struct ShareImgView: View {
                         )
                         .cornerRadius(15)
                         .shadow(radius: 5)
-                    } else if department.passChance >= 20 {
+                    } else if department.passChance >= 0.2 {
                         VStack{
                             Text("進攻志願")
                                 .font(.title2)
@@ -160,6 +160,7 @@ struct ShareImgView: View {
                     }
                 }
             }
+            .padding(.top, 45)
             .padding(.bottom, 45)
             
             HStack{
@@ -319,10 +320,9 @@ struct ShareImgView: View {
             .padding()
             .background(Color(.black).opacity(0.1))
             .cornerRadius(10)
-            .padding(.bottom, 250)
+            .padding(.bottom, 300)
             
-            Spacer()
-            Text("下載此 App 來獲得更全面資料、個人落點分析！")
+            Text("下載 App 並搜尋代碼 \(department.id) \n來獲得關於校系詳細資料以及個人落點分析！")
             HStack{
                 Image("clearlogo")
                     .resizable()
@@ -352,6 +352,7 @@ struct ShareImgView: View {
                 .scaledToFill()
                 .edgesIgnoringSafeArea(.all)
         )
+        .frame(width: 540, height: 960)
         
     }
     
