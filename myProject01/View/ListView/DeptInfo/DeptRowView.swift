@@ -15,6 +15,7 @@ struct DeptRowView: View {
     // StateObject
     // Binding
     // State
+    @State var showAlert: Bool = false
     // --------------- //
     
     var department: deptListModel
@@ -54,10 +55,19 @@ struct DeptRowView: View {
                 Label(data.favoriteDept.contains(department.id) ? "移除最愛" : "加入最愛", systemImage: data.favoriteDept.contains(department.id) ? "heart.fill" : "heart")
             }
             
-            ShareLink(item: "我看上了 \(department.fullName) [\(department.id)]！共有 \(department.enrollmentQuota) 名額，快到「學測個申分析系統」搜尋科系 ID「\(department.id)」來查看詳細資料。") {
+            Button(role: .none){
+                let image = ShareImgView(department: department).asUiImage()
+                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                showAlert = true
+            } label: {
                 Label("分享", systemImage: "square.and.arrow.up")
             }
             
+        }
+        .alert("分享成功", isPresented: $showAlert){
+            Button("好") {}
+        } message: {
+            Text("已將科系資訊分享圖片儲存至相簿")
         }
     }
 }

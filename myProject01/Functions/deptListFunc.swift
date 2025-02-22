@@ -111,163 +111,199 @@ class deptListFunc {
         }
     }
 
-
-    /// 檢查有無通過所有篩選
-    /// 傳入需篩選的科目「標的名稱」以及使用者資料「Data()」，傳出 true / false
-    
+    /// 檢查學生是否通過各科篩選標準
+    ///
+    /// 此函式根據傳入的各科篩選標準（例如：國文、英文、數學等）來判斷學生的成績是否符合要求。
+    /// 如果篩選條件中有多科（例如數學和英文），將根據不同的情況進行不同的邏輯判斷：
+    /// - 如果同時設定數學（MA）和數學（MB）的篩選標準，只需滿足其中一科即可；
+    /// - 如果僅設定其中一科，則需要滿足該科的條件。
+    ///
+    /// - Parameters:
+    ///   - CH: 國文的篩選標準，預設為 "--"，表示不篩選。
+    ///   - EN: 英文的篩選標準，預設為 "--"，表示不篩選。
+    ///   - MA: 數學 A 的篩選標準，預設為 "--"，表示不篩選。
+    ///   - MB: 數學 B 的篩選標準，預設為 "--"，表示不篩選。
+    ///   - SC: 自然科學的篩選標準，預設為 "--"，表示不篩選。
+    ///   - SO: 社會科學的篩選標準，預設為 "--"，表示不篩選。
+    ///   - EL: 英語等級的篩選標準，預設為 "--"，表示不篩選。
+    ///   - data: 包含學生各科成績的資料。
+    ///   - PC: 政治科學的篩選標準，預設為 "--"，表示不篩選。
+    ///   - PP: 心理學的篩選標準，預設為 "--"，表示不篩選。
+    /// - Returns:
+    ///   - 如果學生的成績符合所有指定的篩選條件，則返回 `true`，否則返回 `false`。
     static func checkTestPassed(CH: String = "--", EN: String = "--", MA: String = "--", MB: String = "--", SC: String = "--", SO: String = "--", EL: String = "--", data: gradeData, PC: String = "--", PP: String = "--") -> Bool {
         
-    // 設定對應級分的變數
-    var CHLevel = 0
-    var ENLevel = 0
-    var MALevel = 0
-    var MBLevel = 0
-    var SCLevel = 0
-    var SOLevel = 0
-    var ELLevel = 0
-    var PCLevel = 0
-    var PPLevel = 0
-    
-    // 根據傳入的標準設定每科的級分
-    switch CH {
-    case "頂標":
-        CHLevel = LevelConstants.CHLevel1
-    case "前標":
-        CHLevel = LevelConstants.CHLevel2
-    case "均標":
-        CHLevel = LevelConstants.CHLevel3
-    case "後標":
-        CHLevel = LevelConstants.CHLevel4
-    case "底標":
-        CHLevel = LevelConstants.CHLevel5
-    default:
-        CHLevel = 0 // 代表不篩選
-    }
-    
-    switch EN {
-    case "頂標":
-        ENLevel = LevelConstants.ENLevel1
-    case "前標":
-        ENLevel = LevelConstants.ENLevel2
-    case "均標":
-        ENLevel = LevelConstants.ENLevel3
-    case "後標":
-        ENLevel = LevelConstants.ENLevel4
-    case "底標":
-        ENLevel = LevelConstants.ENLevel5
-    default:
-        ENLevel = 0 // 代表不篩選
-    }
-    
-    switch MA {
-    case "頂標":
-        MALevel = LevelConstants.MALevel1
-    case "前標":
-        MALevel = LevelConstants.MALevel2
-    case "均標":
-        MALevel = LevelConstants.MALevel3
-    case "後標":
-        MALevel = LevelConstants.MALevel4
-    case "底標":
-        MALevel = LevelConstants.MALevel5
-    default:
-        MALevel = 0 // 代表不篩選
-    }
-    
-    switch MB {
-    case "頂標":
-        MBLevel = LevelConstants.MBLevel1
-    case "前標":
-        MBLevel = LevelConstants.MBLevel2
-    case "均標":
-        MBLevel = LevelConstants.MBLevel3
-    case "後標":
-        MBLevel = LevelConstants.MBLevel4
-    case "底標":
-        MBLevel = LevelConstants.MBLevel5
-    default:
-        MBLevel = 0 // 代表不篩選
-    }
-    
-    switch SC {
-    case "頂標":
-        SCLevel = LevelConstants.SCLevel1
-    case "前標":
-        SCLevel = LevelConstants.SCLevel2
-    case "均標":
-        SCLevel = LevelConstants.SCLevel3
-    case "後標":
-        SCLevel = LevelConstants.SCLevel4
-    case "底標":
-        SCLevel = LevelConstants.SCLevel5
-    default:
-        SCLevel = 0 // 代表不篩選
-    }
-    
-    switch SO {
-    case "頂標":
-        SOLevel = LevelConstants.SOLevel1
-    case "前標":
-        SOLevel = LevelConstants.SOLevel2
-    case "均標":
-        SOLevel = LevelConstants.SOLevel3
-    case "後標":
-        SOLevel = LevelConstants.SOLevel4
-    case "底標":
-        SOLevel = LevelConstants.SOLevel5
-    default:
-        SOLevel = 0 // 代表不篩選
-    }
-    
-    switch EL {
-    case "A級":
-        ELLevel = 1
-    case "B級":
-        ELLevel = 2
-    case "C級":
-        ELLevel = 3
-    default:
-        ELLevel = 4 // 代表不篩選
-    }
+        // 設定對應級分的變數
+        var CHLevel = 0
+        var ENLevel = 0
+        var MALevel = 0
+        var MBLevel = 0
+        var SCLevel = 0
+        var SOLevel = 0
+        var ELLevel = 0
+        var PCLevel = 0
+        var PPLevel = 0
         
-    switch PC {
-    case "5級":
-        PCLevel = 5
-    case "4級":
-        PCLevel = 4
-    case "3級":
-        PCLevel = 3
-    case "2級":
-        PCLevel = 2
-    case "1級":
-        PCLevel = 2
-    default:
-        PCLevel = 0
-    }
+        // 根據傳入的標準設定每科的級分
+        switch CH {
+        case "頂標":
+            CHLevel = LevelConstants.CHLevel1
+        case "前標":
+            CHLevel = LevelConstants.CHLevel2
+        case "均標":
+            CHLevel = LevelConstants.CHLevel3
+        case "後標":
+            CHLevel = LevelConstants.CHLevel4
+        case "底標":
+            CHLevel = LevelConstants.CHLevel5
+        default:
+            CHLevel = 0 // 代表不篩選
+        }
         
-    switch PP {
-    case "5級":
-        PPLevel = 5
-    case "4級":
-        PPLevel = 4
-    case "3級":
-        PPLevel = 3
-    case "2級":
-        PPLevel = 2
-    case "1級":
-        PPLevel = 2
-    default:
-        PPLevel = 0
-    }
-    
-    // 判斷是否通過篩選標準
-    return (data.gradeCH >= CHLevel && data.gradeEN >= ENLevel &&
-            data.gradeMA >= MALevel && data.gradeMB >= MBLevel &&
-            data.gradeSC >= SCLevel && data.gradeSO >= SOLevel &&
-            data.gradeEL <= ELLevel && data.gradePC >= PCLevel &&
-            data.gradePP >= PPLevel)
-}
+        switch EN {
+        case "頂標":
+            ENLevel = LevelConstants.ENLevel1
+        case "前標":
+            ENLevel = LevelConstants.ENLevel2
+        case "均標":
+            ENLevel = LevelConstants.ENLevel3
+        case "後標":
+            ENLevel = LevelConstants.ENLevel4
+        case "底標":
+            ENLevel = LevelConstants.ENLevel5
+        default:
+            ENLevel = 0 // 代表不篩選
+        }
+        
+        switch MA {
+        case "頂標":
+            MALevel = LevelConstants.MALevel1
+        case "前標":
+            MALevel = LevelConstants.MALevel2
+        case "均標":
+            MALevel = LevelConstants.MALevel3
+        case "後標":
+            MALevel = LevelConstants.MALevel4
+        case "底標":
+            MALevel = LevelConstants.MALevel5
+        default:
+            MALevel = 0 // 代表不篩選
+        }
+        
+        switch MB {
+        case "頂標":
+            MBLevel = LevelConstants.MBLevel1
+        case "前標":
+            MBLevel = LevelConstants.MBLevel2
+        case "均標":
+            MBLevel = LevelConstants.MBLevel3
+        case "後標":
+            MBLevel = LevelConstants.MBLevel4
+        case "底標":
+            MBLevel = LevelConstants.MBLevel5
+        default:
+            MBLevel = 0 // 代表不篩選
+        }
+        
+        switch SC {
+        case "頂標":
+            SCLevel = LevelConstants.SCLevel1
+        case "前標":
+            SCLevel = LevelConstants.SCLevel2
+        case "均標":
+            SCLevel = LevelConstants.SCLevel3
+        case "後標":
+            SCLevel = LevelConstants.SCLevel4
+        case "底標":
+            SCLevel = LevelConstants.SCLevel5
+        default:
+            SCLevel = 0 // 代表不篩選
+        }
+        
+        switch SO {
+        case "頂標":
+            SOLevel = LevelConstants.SOLevel1
+        case "前標":
+            SOLevel = LevelConstants.SOLevel2
+        case "均標":
+            SOLevel = LevelConstants.SOLevel3
+        case "後標":
+            SOLevel = LevelConstants.SOLevel4
+        case "底標":
+            SOLevel = LevelConstants.SOLevel5
+        default:
+            SOLevel = 0 // 代表不篩選
+        }
+        
+        switch EL {
+        case "A級":
+            ELLevel = 1
+        case "B級":
+            ELLevel = 2
+        case "C級":
+            ELLevel = 3
+        default:
+            ELLevel = 4 // 代表不篩選
+        }
+            
+        switch PC {
+        case "5級":
+            PCLevel = 5
+        case "4級":
+            PCLevel = 4
+        case "3級":
+            PCLevel = 3
+        case "2級":
+            PCLevel = 2
+        case "1級":
+            PCLevel = 2
+        default:
+            PCLevel = 0
+        }
+            
+        switch PP {
+        case "5級":
+            PPLevel = 5
+        case "4級":
+            PPLevel = 4
+        case "3級":
+            PPLevel = 3
+        case "2級":
+            PPLevel = 2
+        case "1級":
+            PPLevel = 2
+        default:
+            PPLevel = 0
+        }
+        
+        // 判斷是否有設定 MA 和 MB 的篩選標準
+        let hasMAFilter = MA != "--"
+        let hasMBFilter = MB != "--"
 
+        let MA_MB_Passed: Bool
+        if hasMAFilter && hasMBFilter {
+            // 同時有 MA 和 MB 的篩選標準 -> 只要其中一科達標即可
+            MA_MB_Passed = (data.gradeMA >= MALevel || data.gradeMB >= MBLevel)
+        } else if hasMAFilter {
+            // 只有 MA 需要篩選 -> 需滿足 MA
+            MA_MB_Passed = (data.gradeMA >= MALevel)
+        } else if hasMBFilter {
+            // 只有 MB 需要篩選 -> 需滿足 MB
+            MA_MB_Passed = (data.gradeMB >= MBLevel)
+        } else {
+            // 沒有 MA 或 MB 的篩選標準，直接通過
+            MA_MB_Passed = true
+        }
+        
+        // 最終判斷是否通過篩選標準
+        return (data.gradeCH >= CHLevel && data.gradeEN >= ENLevel &&
+                MA_MB_Passed &&
+                data.gradeSC >= SCLevel && data.gradeSO >= SOLevel &&
+                data.gradeEL <= ELLevel && data.gradePC >= PCLevel &&
+                data.gradePP >= PPLevel)
+    }
+
+    
     /// 篩選名稱排序
     /// 傳入所有篩選倍率的科目名稱，傳出排序後的字串
     

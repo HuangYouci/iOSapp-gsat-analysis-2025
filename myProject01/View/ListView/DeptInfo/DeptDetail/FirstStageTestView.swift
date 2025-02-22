@@ -185,7 +185,7 @@ struct FirstStageTestView: View {
                                 Text(deptListFunc.getFiveStandard(for: "SO", grade: data.gradeSO))
                                     .foregroundColor(deptListFunc.checkTestPassed(SO: department.socialTest, data: data) ? Color.green : Color.red)
                             }
-                            if (department.englishListeningTest != "--") {     Text(data.gradeEL == 3 ? "C 級" : (data.gradeEL == 2 ? "B 級" : (data.gradeEL == 1 ? "A 級" : "F 級")))
+                            if (department.englishListeningTest != "--") {     Text(data.gradeEL == 3 ? "C級" : (data.gradeEL == 2 ? "B級" : (data.gradeEL == 1 ? "A級" : "F級")))
                                     .foregroundColor(deptListFunc.checkTestPassed(EL: department.englishTest, data: data) ? Color.green : Color.red)
                             }
                             if ( !department.programmingConceptTest.isEmpty) { Text("\(data.gradePC) 級")
