@@ -13,6 +13,7 @@ struct HomeView: View {
     // EnvironmentObject
     // StateObject
     @EnvironmentObject private var data: UserDef
+    @EnvironmentObject private var databaseInfo: DatabaseInfo
     // Binding
     @Binding var selectedTab: Int
     // State
@@ -67,22 +68,22 @@ struct HomeView: View {
             }
             .padding(.bottom)
             
-            HStack{
-                Image(systemName: "square.and.pencil")
-                    .opacity(0.5)
-                Text("成績輸入")
-                    .opacity(0.5)
-                
-                Spacer()
-            }
-            .padding(.bottom,10)
-            
-            Text("輸入規則：於國文、英文、數Ａ、數Ｂ、自然、社會，請輸入 0 到 15 的整數（您的成績級分），如果您未報考該科，請輸入 0 級分；於英聽，請選擇 A/B/C/F 級。")
-                .font(.caption)
-                .opacity(0.5)
-                .padding(.bottom,10)
-            
             ScrollView {
+                
+                HStack{
+                    Image(systemName: "square.and.pencil")
+                        .opacity(0.5)
+                    Text("成績輸入")
+                        .opacity(0.5)
+                    
+                    Spacer()
+                }
+                .padding(.bottom,10)
+                
+                Text("輸入規則：於國文、英文、數Ａ、數Ｂ、自然、社會，請輸入 0 到 15 的整數（您的成績級分），如果您未報考該科，請輸入 0 級分；於英聽，請選擇 A/B/C/F 級。")
+                    .font(.caption)
+                    .opacity(0.5)
+                    .padding(.bottom,10)
                 
                 VStack{
                     
@@ -139,6 +140,16 @@ struct HomeView: View {
                     
                 }
                 
+                Text("資料版本：\(databaseInfo.version)")
+                    .font(.caption)
+                    .opacity(0.6)
+                    .padding(.top, 10)
+                
+                HStack{
+                    Text(databaseInfo.announcement)
+                }
+                .padding(.top, 10)
+                
             }
                 
             if isFinishedForm {
@@ -169,11 +180,14 @@ struct HomeView: View {
                     
                     Spacer()
                 }
+                .clipShape(Capsule())
+                .buttonStyle(.borderedProminent)
                 .padding()
                 
             } else {
                 
                 if data.analyzeCount < 1 {
+                    
                     HStack{
                         Image(systemName: "exclamationmark.triangle")
                             .foregroundColor(.red)
@@ -185,43 +199,62 @@ struct HomeView: View {
                     .padding(.bottom,5)
                     
                     HStack{
-                        Text("目前沒有分析次數了，請到「關於」頁面了解如何獲得分析次數")
+                        Text("目前沒有分析次數了，可透過觀看廣告來獲得觀看次數。到「關於」頁面查看剩餘的分析次數，或是購買付費用戶等級來獲得無限分析次數。")
                             .font(.caption)
                             .opacity(0.5)
                         Spacer()
                     }
+                    
+                    Button(role: .none) {
+                        
+                        hideKeyboard()
+                        selectedTab = 2
+                        
+                    } label : {
+                        Spacer()
+                        
+                        Text("前往「關於」頁面")
+                        
+                        Spacer()
+                    }
+                    .clipShape(Capsule())
+                    .buttonStyle(.borderedProminent)
+                    .padding()
+                    
+                } else {
+                    
+                    Button(role: .none) {
+                        
+                        hideKeyboard()
+                        data.addNewResultData(gradeCH: Int(EditingGradeCH) ?? 0 , gradeEN: Int(EditingGradeEN) ?? 0 , gradeMA: Int(EditingGradeMA) ?? 0 , gradeMB: Int(EditingGradeMB) ?? 0 , gradeSC: Int(EditingGradeSC) ?? 0 , gradeSO: Int(EditingGradeSO) ?? 0 , gradeEL: EditingGradeEL, gradePC: EditingGradePC, gradePP: EditingGradePP, gradeSK1: Int(EditingGradeSK1) ?? 0 , gradeSK2: Int(EditingGradeSK2) ?? 0 , gradeSK3: Int(EditingGradeSK3) ?? 0 , gradeSK4: Int(EditingGradeSK4) ?? 0 , gradeSK5: Int(EditingGradeSK5) ?? 0 , gradeSKT: EditingGradeSKT)
+                        isFinishedForm = true
+                        data.analyzeCount -= 1
+                        
+                    } label : {
+                        Spacer()
+                        
+                        Text("提交")
+                        
+                        Spacer()
+                    }
+                    .clipShape(Capsule())
+                    .buttonStyle(.borderedProminent)
+                    .disabled(
+                        !isValidGrade(EditingGradeCH) ||
+                        !isValidGrade(EditingGradeMA) ||
+                        !isValidGrade(EditingGradeMB) ||
+                        !isValidGrade(EditingGradeSC) ||
+                        !isValidGrade(EditingGradeSO) ||
+                        !isValidGrade(EditingGradeEN) ||
+                        !isValidGradeSK(EditingGradeSK1) ||
+                        !isValidGradeSK(EditingGradeSK2) ||
+                        !isValidGradeSK(EditingGradeSK3) ||
+                        !isValidGradeSK(EditingGradeSK4) ||
+                        !isValidGradeSK(EditingGradeSK5) || data.analyzeCount < 1
+                    )
+                    .padding()
+                    
                 }
-                
-                Button(role: .none) {
-                    
-                    hideKeyboard()
-                    data.addNewResultData(gradeCH: Int(EditingGradeCH) ?? 0 , gradeEN: Int(EditingGradeEN) ?? 0 , gradeMA: Int(EditingGradeMA) ?? 0 , gradeMB: Int(EditingGradeMB) ?? 0 , gradeSC: Int(EditingGradeSC) ?? 0 , gradeSO: Int(EditingGradeSO) ?? 0 , gradeEL: EditingGradeEL, gradePC: EditingGradePC, gradePP: EditingGradePP, gradeSK1: Int(EditingGradeSK1) ?? 0 , gradeSK2: Int(EditingGradeSK2) ?? 0 , gradeSK3: Int(EditingGradeSK3) ?? 0 , gradeSK4: Int(EditingGradeSK4) ?? 0 , gradeSK5: Int(EditingGradeSK5) ?? 0 , gradeSKT: EditingGradeSKT)
-                    isFinishedForm = true
-                    data.analyzeCount -= 1
-                    
-                } label : {
-                    Spacer()
-                    
-                    Text(data.analyzeCount < 1 ? "分析次數不足" : "提交")
-                    
-                    Spacer()
-                }
-                .clipShape(Capsule())
-                .buttonStyle(.borderedProminent)
-                .disabled(
-                    !isValidGrade(EditingGradeCH) ||
-                    !isValidGrade(EditingGradeMA) ||
-                    !isValidGrade(EditingGradeMB) ||
-                    !isValidGrade(EditingGradeSC) ||
-                    !isValidGrade(EditingGradeSO) ||
-                    !isValidGrade(EditingGradeEN) ||
-                    !isValidGradeSK(EditingGradeSK1) ||
-                    !isValidGradeSK(EditingGradeSK2) ||
-                    !isValidGradeSK(EditingGradeSK3) ||
-                    !isValidGradeSK(EditingGradeSK4) ||
-                    !isValidGradeSK(EditingGradeSK5) || data.analyzeCount < 1
-                )
-                .padding()
                 
             }
             

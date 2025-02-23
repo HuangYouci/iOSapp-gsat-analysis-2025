@@ -16,6 +16,7 @@ struct myProject01App: App {
     // StateObject
     @StateObject private var data = UserDef()
     @StateObject private var deptList = DeptDataModel()
+    @StateObject private var databaseInfo = DatabaseInfo()
     @StateObject private var iapManager = IAPManager.shared
     // Binding
     // State
@@ -42,6 +43,7 @@ struct myProject01App: App {
                 ContentView()
                     .environmentObject(data)
                     .environmentObject(deptList)
+                    .environmentObject(databaseInfo)
                     .environmentObject(iapManager)
             }
         }        

@@ -5,7 +5,8 @@ struct ContentView: View {
     // EnvironmentObject
     // StateObject
     @EnvironmentObject private var data: UserDef
-    @EnvironmentObject var deptList: DeptDataModel
+    @EnvironmentObject private var deptList: DeptDataModel
+    @EnvironmentObject private var databaseInfo: DatabaseInfo
     // Binding
     // State
     @State private var selectedTab = 0
@@ -63,6 +64,8 @@ struct ContentView: View {
                 } else {
                     print("未檢測到購買狀態")
                 }
+                
+                await loadURLData(databaseInfo: databaseInfo)
             }
         }
     }

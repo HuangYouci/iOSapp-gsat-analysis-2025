@@ -16,6 +16,7 @@ struct AboutView: View {
     // EnvironmentObject
     @EnvironmentObject var data: UserDef
     @EnvironmentObject var deptList: DeptDataModel
+    @EnvironmentObject var databaseInfo: DatabaseInfo
     // StateObject
     // Binding
     @Binding var selectedTab: Int
@@ -98,7 +99,10 @@ struct AboutView: View {
                         HStack{
                             
                             if data.userpurchased {
-                                Text("感謝支持！現在已獲得無限次分析次數。")
+                                HStack{
+                                    Text("感謝支持！現在已獲得無限次分析次數。")
+                                    Spacer()
+                                }
                                 
                             } else {
                                 Text("購買付費方案支持開發以獲得無限次分析次數")
@@ -177,6 +181,20 @@ struct AboutView: View {
                         .padding(10)
                         .background(Color(.secondarySystemGroupedBackground).opacity(0.5))
                         .cornerRadius(10)
+                        
+                        Divider()
+                        
+                        HStack{
+                            Text("資料版本")
+                                .foregroundStyle(Color.accentColor)
+                            
+                            Spacer()
+                            
+                            Text("\(databaseInfo.version)")
+                            
+                        }
+                        .padding(5)
+                        
                         
                     }
                     .padding(10)

@@ -208,20 +208,6 @@ struct FirstInfoView: View {
                         
                     }
                     .padding(5)
-                    
-                    Divider()
-                    
-                    HStack{
-                        
-                        Text("資料內容")
-                            .foregroundColor(.accentColor)
-                        
-                        Spacer()
-                        
-                        Text("114年")
-                        
-                    }
-                    .padding(5)
                 }
                 .padding(10)
                 .background(Color(.systemGroupedBackground))
