@@ -431,6 +431,8 @@ class deptListFunc {
     
     static func calPassChance(testResult: String = "--", data: gradeData) -> Double {
         
+        let developerMode = false
+        
         if testResult == "無資料" { return 0.00 }
         
         let parseTestResult = zip(parseTestResult(testResult, outputType: 0), parseTestResult(testResult, outputType: 1))
@@ -442,7 +444,14 @@ class deptListFunc {
         
         for (subject, value) in parseTestResult {
             
-            if chance > 0.5 { chance = 0.5+((chance - 0.5)*0.7) }
+            if developerMode { print("\(subject) 組合 \(value) ~ 第一步(初始化)機率為 \(chance)") }
+            
+            /// 如果是第二個科目（不包含超篩），而且使用者機率 50% 以上，就把他的機率變成與 50% 的差距的 70%
+            if (chance > 0.5 && subject != "超額篩選") { chance = 0.5+((chance - 0.5)*0.7) }
+            /// 如果是超篩，就進行判斷：如果使用者最後一個科目的科目組合差距在正一級以內都要被 -7%
+            if (subject == "超額篩選" && calDiff < 1) { chance *= 0.93 }
+            
+            if developerMode { print("\(subject) 組合 \(value) ~ 第二步(變成50%的70%)機率為 \(chance)") }
             
             /// 如果有下回合就讓上回合的影響變小
             /// 只有當：chance > 0.5 時，才和 50% 的差距的 70%
@@ -473,7 +482,9 @@ class deptListFunc {
                 
             }
             
-            if (calDiff == (calSubCount * 15)) { chance *= 1.9 }
+            if (calDiff == (calSubCount * 15)) { chance *= 1.8 }
+            
+            if developerMode { print("\(subject) 組合 \(value) ~ 第三步(15級分80%)機率為 \(chance)") }
             
             /// 在此 calDiff 還沒扣掉結果分數，是使用者原本的分數
             /// 如果使用者原本分數是滿級分，則機率直接 +90%
@@ -486,8 +497,12 @@ class deptListFunc {
             /// times 是該科的採計倍數
             /// 倍數越多越有利（倍數先不實作）
             
+            if developerMode { print("\(subject) 組合 \(value) ~ 原始差 \(calDiff) 級分") }
+            
             calDiffDivSubCount = Double(calDiff) / Double(calSubCount)
             calDiffDivSubCount *= (1 + 0.7 * Double(calSubCount)) // 暫時的
+            
+            if developerMode {  print("\(subject) 組合 \(value) ~ 加權差 \(calDiffDivSubCount) 級分") }
             
             /// chance 機率實作
             /// calDiffDivSubCount 是 平均每科目差級分
@@ -508,20 +523,20 @@ class deptListFunc {
             case -0.5..<0.5:
                 break  // +0% (不變)
             case -1..<(-0.5):
-                chance *= 0.95  // -5%
+                chance *= 0.80  // -5% (20%)
             case -2..<(-1):
-                chance *= 0.90  // -10%
+                chance *= 0.75  // -10% (25%)
             case -3..<(-2):
-                chance *= 0.85  // -15%
+                chance *= 0.60  // -15% (40%)
             case -4..<(-3):
-                chance *= 0.70 // -30%
+                chance *= 0.55 // -30% (45%)
             case -5..<(-4):
-                chance *= 0.50 // -50%
+                chance *= 0.35 // -50% (65%)
             default:
-                chance *= 0.40  // -60%
+                chance *= 0.25  // -60% (75%)
             }
             
-            // print("計算 \(subject) 科之後的機率是 \(chance)")
+            if developerMode { print("\(subject) 組合 \(value) ~ 第四步(級分判斷)機率為 \(chance)") }
             
         }
         

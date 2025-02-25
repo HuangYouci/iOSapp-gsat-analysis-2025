@@ -11,12 +11,16 @@ import SwiftUI
 class DatabaseInfo: ObservableObject {
     @Published var version: String
     @Published var announcement: String
+    @Published var adMessage: String
     
     // 初始化
-    init(version: String = "113 年 (更新於 2025/02/23)",
-         announcement: String = "無法連線到資料庫，目前五標為 113 年資料。請確保連上網路，嘗試重新載入 App。如果狀況持續，請聯絡開發者。") {
+    init(version: String = "114 年 (更新於 2025/02/25)",
+         announcement: String = "無法連線到資料庫，目前五標為 114 年資料。請確保連上網路，嘗試重新載入 App。如果狀況持續，請聯絡開發者。",
+         adMessage: String = "null")
+    {
         self.version = version
         self.announcement = announcement
+        self.adMessage = adMessage
     }
     
     func updateDatabaseVersion(_ versionString: String) {
@@ -49,6 +53,23 @@ class DatabaseInfo: ObservableObject {
         } else {
             // 如果無法解析公告，顯示錯誤訊息
             print("updateAnnouncement | 無法解析公告")
+        }
+    }
+    
+    func updateAdMessage(_ string: String) {
+        // 檢查字串中是否包含 ":"
+        let components = string.split(separator: ":")
+        
+        if components.count == 2 {
+            // 取得公告並去除多餘的空白字符
+            let adMessage = components[1].trimmingCharacters(in: .whitespaces)
+            DispatchQueue.main.async {
+                self.adMessage = adMessage
+            }
+            print("updateAdMessage | 廣告已更新為：\(adMessage)")
+        } else {
+            // 如果無法解析公告，顯示錯誤訊息
+            print("updateAdMessage | 無法解析廣告")
         }
     }
 }

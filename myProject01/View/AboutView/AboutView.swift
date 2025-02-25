@@ -29,6 +29,8 @@ struct AboutView: View {
     @State private var isAdLoaded = false
     @State private var showPurchaseError = false
     @State private var purchaseErrorMessage = ""
+    @State private var adLoadMessage = ""
+    @State private var isShowNoAdShowView = false
     // --------------- //
     
     func loadRewardedAd() {
@@ -36,6 +38,7 @@ struct AboutView: View {
         RewardedAd.load(with: adUnitID, request: Request()) { ad, error in
           if let error = error {
             print("Failed to load rewarded ad: \(error.localizedDescription)")
+            adLoadMessage = error.localizedDescription
             isAdLoaded = false
           } else {
             rewardAd = ad
@@ -169,18 +172,38 @@ struct AboutView: View {
                             Text("可透過觀看廣告來獲得分析次數")
                             Spacer()
                             
-                            Button(role: .none){
-                                showRewardedAd()
-                            } label: {
-                                Text(isAdLoaded ? "觀看" : "載入中...")
+                            if (databaseInfo.adMessage.contains("FORCEMYAD")) {
+                                Button(role: .none){
+                                    isShowNoAdShowView = true
+                                } label: {
+                                    Text("觀看")
+                                }
+                                .buttonStyle(.borderedProminent)
+                            } else {
+                                Button(role: .none){
+                                    showRewardedAd()
+                                } label: {
+                                    Text(isAdLoaded ? "觀看" : "載入中...")
+                                }
+                                .disabled(!isAdLoaded)
+                                .buttonStyle(.borderedProminent)
                             }
-                            .disabled(!isAdLoaded)
-                            .buttonStyle(.borderedProminent)
                             
                         }
                         .padding(10)
                         .background(Color(.secondarySystemGroupedBackground).opacity(0.5))
                         .cornerRadius(10)
+                        
+                        if !adLoadMessage.isEmpty && !databaseInfo.adMessage.contains("FORCEMYAD") {
+                            Text("廣告載入錯誤：\(adLoadMessage) 如果狀況持續，請聯絡開發者。")
+                                .foregroundStyle(Color(.red))
+                            Button(role: .none){
+                                isShowNoAdShowView = true
+                            } label: {
+                                Text("顯示替代廣告")
+                            }
+                            .buttonStyle(.borderedProminent)
+                        }
                         
                         Divider()
                         
@@ -308,6 +331,9 @@ struct AboutView: View {
                     Button("確定", role: .cancel) { }
                 } message: {
                     Text(purchaseErrorMessage)
+            }
+            .sheet(isPresented: $isShowNoAdShowView) {
+                NoAdShowView()
             }
         
     }

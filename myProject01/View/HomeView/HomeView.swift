@@ -140,11 +140,6 @@ struct HomeView: View {
                     
                 }
                 
-                Text("資料版本：\(databaseInfo.version)")
-                    .font(.caption)
-                    .opacity(0.6)
-                    .padding(.top, 10)
-                
                 HStack{
                     Text(databaseInfo.announcement)
                 }

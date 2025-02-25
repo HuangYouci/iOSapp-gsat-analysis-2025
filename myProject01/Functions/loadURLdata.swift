@@ -24,11 +24,12 @@ func loadURLData(databaseInfo: DatabaseInfo) async {
             let dataArray = content.split(separator: ";").map { String($0) }
             
             // 如果資料有足夠的項目
-            if dataArray.count >= 7 {
+            if dataArray.count >= 8 {
                 // 先處理版本資料
                 DispatchQueue.main.async {
                     databaseInfo.updateDatabaseVersion(dataArray[0])
                     databaseInfo.updateAnnouncement(dataArray[7])
+                    databaseInfo.updateAdMessage(dataArray[8])
                 }
                 
                 // 依次處理其他六筆資料
@@ -107,6 +108,3 @@ func updateLevelConstants(_ data: String) {
         break
     }
 }
-
-
-

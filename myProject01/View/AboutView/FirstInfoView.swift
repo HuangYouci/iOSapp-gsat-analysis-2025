@@ -204,7 +204,7 @@ struct FirstInfoView: View {
                         
                         Spacer()
                         
-                        Text("v1.0.2")
+                        Text("v1.0.3")
                         
                     }
                     .padding(5)

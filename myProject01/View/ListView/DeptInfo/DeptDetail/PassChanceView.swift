@@ -178,13 +178,11 @@ struct PassChanceView: View {
             }
             .padding(.bottom)
             
-            /*
-            HStack {
-                Text("系統計算原始數據")
-                Spacer()
-                Text(String(calPassChancePercent))
-            }
-             */
+//            HStack {
+//                Text("系統計算原始數據")
+//                Spacer()
+//                Text(String(calPassChancePercent))
+//            }
             
         }
         .padding()
