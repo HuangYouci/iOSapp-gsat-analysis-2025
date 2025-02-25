@@ -168,41 +168,34 @@ struct AboutView: View {
                         }
                         .padding(5)
                         
-                        HStack{
-                            Text("可透過觀看廣告來獲得分析次數")
-                            Spacer()
+                        if !data.userpurchased {
                             
-                            if (databaseInfo.adMessage.contains("FORCEMYAD")) {
-                                Button(role: .none){
-                                    isShowNoAdShowView = true
-                                } label: {
-                                    Text("觀看")
+                            HStack{
+                                Text("可透過觀看廣告來獲得分析次數")
+                                Spacer()
+                                
+                                if (databaseInfo.adMessage.contains("FORCEMYAD") || !isAdLoaded) {
+                                    Button(role: .none){
+                                        isShowNoAdShowView = true
+                                    } label: {
+                                        Text("觀看")
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                } else {
+                                    Button(role: .none){
+                                        showRewardedAd()
+                                    } label: {
+                                        Text("觀看")
+                                    }
+                                    .disabled(!isAdLoaded)
+                                    .buttonStyle(.borderedProminent)
                                 }
-                                .buttonStyle(.borderedProminent)
-                            } else {
-                                Button(role: .none){
-                                    showRewardedAd()
-                                } label: {
-                                    Text(isAdLoaded ? "觀看" : "載入中...")
-                                }
-                                .disabled(!isAdLoaded)
-                                .buttonStyle(.borderedProminent)
+                                
                             }
+                            .padding(10)
+                            .background(Color(.secondarySystemGroupedBackground).opacity(0.5))
+                            .cornerRadius(10)
                             
-                        }
-                        .padding(10)
-                        .background(Color(.secondarySystemGroupedBackground).opacity(0.5))
-                        .cornerRadius(10)
-                        
-                        if !adLoadMessage.isEmpty && !databaseInfo.adMessage.contains("FORCEMYAD") {
-                            Text("廣告載入錯誤：\(adLoadMessage) 如果狀況持續，請聯絡開發者。")
-                                .foregroundStyle(Color(.red))
-                            Button(role: .none){
-                                isShowNoAdShowView = true
-                            } label: {
-                                Text("顯示替代廣告")
-                            }
-                            .buttonStyle(.borderedProminent)
                         }
                         
                         Divider()
@@ -218,6 +211,18 @@ struct AboutView: View {
                         }
                         .padding(5)
                         
+                        Divider()
+                        
+                        HStack{
+                            Text("程式版本")
+                                .foregroundStyle(Color.accentColor)
+                            
+                            Spacer()
+                            
+                            Text("\(LevelConstants.programVersion)")
+                            
+                        }
+                        .padding(5)
                         
                     }
                     .padding(10)
@@ -300,7 +305,12 @@ struct AboutView: View {
                     .background(Color(.quaternarySystemFill))
                     .cornerRadius(10)
                     
-                    Spacer()
+                    BannerAdView()
+                        .frame(height: 80)
+                    
+                    Text("\(adLoadMessage)")
+                        .font(.caption)
+                        .foregroundStyle(Color(.systemGray6))
                     
                 }
                 
@@ -321,20 +331,20 @@ struct AboutView: View {
             }
             
         }
-            .onAppear { 
-                favoriteDept = deptList.departments.filter { dept in
-                    data.favoriteDept.contains(dept.id)
-                }
-                loadRewardedAd()
+        .onAppear {
+            favoriteDept = deptList.departments.filter { dept in
+                data.favoriteDept.contains(dept.id)
             }
-            .alert("購買失敗", isPresented: $showPurchaseError) {
-                    Button("確定", role: .cancel) { }
-                } message: {
-                    Text(purchaseErrorMessage)
-            }
-            .sheet(isPresented: $isShowNoAdShowView) {
-                NoAdShowView()
-            }
+            loadRewardedAd()
+        }
+        .alert("購買失敗", isPresented: $showPurchaseError) {
+                Button("確定", role: .cancel) { }
+            } message: {
+                Text(purchaseErrorMessage)
+        }
+        .sheet(isPresented: $isShowNoAdShowView) {
+            NoAdShowView()
+        }
         
     }
 }

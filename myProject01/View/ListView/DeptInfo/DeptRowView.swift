@@ -21,6 +21,9 @@ struct DeptRowView: View {
     var department: deptListModel
     
     var body: some View {
+        
+        var isFavorite: Bool = false
+        
         VStack {
             HStack{
                 VStack{
@@ -44,30 +47,42 @@ struct DeptRowView: View {
         .background(Color(.quaternarySystemFill))
         .cornerRadius(10)
         .contextMenu{
-            
-            Button(role: .none){
-                if data.favoriteDept.contains(department.id) {
-                    data.favoriteDept.remove(at: Int(data.favoriteDept.firstIndex(of: department.id)!))
-                } else {
-                    data.favoriteDept.append(department.id)
+                    
+                    Button(role: .none){
+                        if data.favoriteDept.contains(department.id) {
+                            data.favoriteDept.remove(at: Int(data.favoriteDept.firstIndex(of: department.id)!))
+                        } else {
+                            data.favoriteDept.append(department.id)
+                        }
+                    } label: {
+                        Label(data.favoriteDept.contains(department.id) ? "移除最愛" : "加入最愛", systemImage: data.favoriteDept.contains(department.id) ? "heart.fill" : "heart")
+                    }
+                    
+                    Button(role: .none){
+                        let image = ShareImgView(department: department).asUiImage()
+                        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                        showAlert = true
+                    } label: {
+                        Label("分享", systemImage: "square.and.arrow.up")
+                    }
+                    
                 }
-            } label: {
-                Label(data.favoriteDept.contains(department.id) ? "移除最愛" : "加入最愛", systemImage: data.favoriteDept.contains(department.id) ? "heart.fill" : "heart")
-            }
-            
-            Button(role: .none){
-                let image = ShareImgView(department: department).asUiImage()
-                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-                showAlert = true
-            } label: {
-                Label("分享", systemImage: "square.and.arrow.up")
-            }
-            
-        }
         .alert("分享成功", isPresented: $showAlert){
             Button("好") {}
         } message: {
             Text("已將科系資訊分享圖片儲存至相簿")
+        }
+        .onAppear {
+            isFavorite = data.favoriteDept.contains(department.id)
+        }
+        .onChange(of: isFavorite) { _ in
+            // 在视图消失时同步到环境对象
+            if isFavorite && !data.favoriteDept.contains(department.id) {
+                data.favoriteDept.append(department.id)
+            }
+            if !isFavorite && data.favoriteDept.contains(department.id) {
+                data.favoriteDept.remove(at: Int(data.favoriteDept.firstIndex(of: department.id)!))
+            }
         }
     }
 }

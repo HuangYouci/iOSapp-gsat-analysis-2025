@@ -48,9 +48,6 @@ struct DeptDetailView: View {
                 
                 if displayMore { PassChanceView(department: department, data: data) } // 需要 data
                 
-                BannerAdView()
-                    .frame(height: 80)
-                
             }
         }
         .padding()

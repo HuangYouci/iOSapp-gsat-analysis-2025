@@ -188,7 +188,7 @@ struct FirstInfoView: View {
                         Text("學測個申分析系統")
                             .bold()
                         
-                        Text("由 HYC 開發")
+                        Text("由 YC 開發")
                         
                         Text("ycdev@icloud.com")
                         
@@ -204,7 +204,7 @@ struct FirstInfoView: View {
                         
                         Spacer()
                         
-                        Text("v1.0.4")
+                        Text("\(LevelConstants.programVersion)")
                         
                     }
                     .padding(5)
