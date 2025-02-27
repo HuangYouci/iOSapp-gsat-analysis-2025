@@ -47,25 +47,25 @@ struct DeptRowView: View {
         .cornerRadius(10)
         .contextMenu{
                     
-                    Button(role: .none){
-                        if favData.favoriteDept.contains(department.id) {
-                            favData.favoriteDept.remove(at: Int(favData.favoriteDept.firstIndex(of: department.id)!))
-                        } else {
-                            favData.favoriteDept.append(department.id)
-                        }
-                    } label: {
-                        Label(favData.favoriteDept.contains(department.id) ? "移除最愛" : "加入最愛", systemImage: favData.favoriteDept.contains(department.id) ? "heart.fill" : "heart")
+                Button(role: .none){
+                    if favData.favoriteDept.contains(department.id) {
+                        favData.favoriteDept.remove(at: Int(favData.favoriteDept.firstIndex(of: department.id)!))
+                    } else {
+                        favData.favoriteDept.append(department.id)
                     }
-                    
-                    Button(role: .none){
-                        let image = ShareImgView(department: department).asUiImage()
-                        UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
-                        showAlert = true
-                    } label: {
-                        Label("分享", systemImage: "square.and.arrow.up")
-                    }
-                    
+                } label: {
+                    Label(favData.favoriteDept.contains(department.id) ? "移除最愛" : "加入最愛", systemImage: favData.favoriteDept.contains(department.id) ? "heart.fill" : "heart")
                 }
+                
+                Button(role: .none){
+                    let image = ShareImgView(department: department).asUiImage()
+                    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+                    showAlert = true
+                } label: {
+                    Label("分享", systemImage: "square.and.arrow.up")
+                }
+                
+            }
         .alert("分享成功", isPresented: $showAlert){
             Button("好") {}
         } message: {

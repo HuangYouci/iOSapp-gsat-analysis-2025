@@ -12,14 +12,20 @@ struct ResultListView: View {
     // --------------- //
     // EnvironmentObject
     @EnvironmentObject var data: UserData
+    @EnvironmentObject var favData: UserFavData
     @EnvironmentObject var deptList: DeptDataModel
     // StateObject
     // Binding
     @Binding var selectedTab: Int
     // State
-    @State private var expandedIndices: Set<Int> = []
+    // @State private var expandedIndices: Set<Int> = []
+    @State private var expandedIndex: Int = -1
     @State private var deleteIndex: Int = 0
     @State private var showDeleteConfirmation: Bool = false
+    
+    @State private var showEditNameAlert: Bool = false
+    @State private var editGradeData: gradeData?
+    @State private var newName: String = ""
     // --------------- //
     
     
@@ -55,9 +61,11 @@ struct ResultListView: View {
                         
                         ForEach(data.userResultData.indices, id: \.self) { index in
                             
-                            let isExpanded = expandedIndices.contains(index)
+                            // let isExpanded = expandedIndices.contains(index)
+                            let isExpanded = ( expandedIndex == index )
                             
                             let gradeData = gradeData(
+                                id: data.userResultData[index].id,
                                 gradeCH: data.userResultData[index].gradeCH,
                                 gradeEN: data.userResultData[index].gradeEN,
                                 gradeMA: data.userResultData[index].gradeMA,
@@ -79,7 +87,11 @@ struct ResultListView: View {
                                 HStack{
                                     VStack{
                                         HStack{
-                                            Text("分析 #\(index + 1)")
+                                            if let name = favData.getGradeName(for: gradeData) {
+                                                Text(name)
+                                            } else {
+                                                Text("分析 #\(index + 1)")
+                                            }
                                             Spacer()
                                         }
                                         HStack{
@@ -106,7 +118,7 @@ struct ResultListView: View {
                                     HStack{
                                         
                                         NavigationLink(destination: ResultView(data: gradeData)){
-                                            Label("載入此資料的分析", systemImage: "square.and.arrow.down")
+                                            Label("載入分析", systemImage: "square.and.arrow.down")
                                         }
                                         .buttonStyle(.borderedProminent)
                                         .simultaneousGesture(TapGesture().onEnded {
@@ -114,8 +126,19 @@ struct ResultListView: View {
                                         })
                                         
                                         Spacer()
+                                        if ( data.userpurchased ) {
+                                            Button(role: .none){
+                                                editGradeData = gradeData
+                                                newName = favData.getGradeName(for: gradeData) ?? "" // 預載入名稱
+                                                showEditNameAlert = true
+                                            } label: {
+                                                Label("更名", systemImage: "pencil")
+                                            }
+                                            .buttonStyle(.bordered)
+                                        }
                                         Button(role: .destructive){
                                             deleteIndex = index
+                                            editGradeData = gradeData
                                             showDeleteConfirmation = true
                                         } label: {
                                             Image(systemName: "trash")
@@ -131,9 +154,10 @@ struct ResultListView: View {
                             .cornerRadius(10)
                             .onTapGesture {
                                 if isExpanded {
-                                    expandedIndices.remove(index)
+                                    // expandedIndices.remove(index)
+                                    expandedIndex = -1
                                 } else {
-                                    expandedIndices.insert(index)
+                                    expandedIndex = index
                                 }
                             }
 
@@ -156,12 +180,26 @@ struct ResultListView: View {
         }
         .confirmationDialog("確定刪除此筆分析結果？", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
             Button("確定", role: .destructive) {
-                data.userResultData.remove(at: deleteIndex)
+                if let grade = editGradeData {
+                    _ = favData.removeGradeName(for: grade)
+                    data.userResultData.remove(at: deleteIndex)
+                }
             }
             Button("取消", role: .cancel) {
             }
         } message: {
             Text("此操作會刪除此筆成績資料與分析結果。\n清除後將不可復原，使用的分析次數亦不返還。")
+        }
+        .alert("編輯名稱", isPresented: $showEditNameAlert) {
+            TextField("輸入名稱", text: $newName)
+            Button("確定") {
+                if let grade = editGradeData {
+                    favData.setGradeName(for: grade, name: newName)
+                }
+            }
+            Button("取消", role: .cancel) {}
+        } message: {
+            Text("請輸入此分析結果的新名稱")
         }
         
     }

@@ -59,21 +59,21 @@ class IAPManager: NSObject, ObservableObject {
         
         do {
             let productIDs: Set<String> = ["myProject01_userpurchased"] // 你的產品 ID
-            print("開始獲取商品...")
+            print("IAPManager | 開始獲取商品...")
             let storeProducts = try await Product.products(for: productIDs)
-            print("成功獲取商品: \(storeProducts.count) 個")
+            print("IAPManager | 成功獲取商品: \(storeProducts.count) 個")
             self.products = storeProducts
             
             // 印出獲取到的商品詳情
             for product in storeProducts {
-                print("商品ID: \(product.id)")
-                print("商品名稱: \(product.displayName)")
-                print("商品價格: \(product.displayPrice)")
+                print("IPAManager | \n- 商品ID: \(product.id)")
+                print("- 商品名稱: \(product.displayName)")
+                print("- 商品價格: \(product.displayPrice)")
             }
         } catch {
-            print("取得商品詳細錯誤: \(error.localizedDescription)")
+            print("IAPManager | 取得商品詳細錯誤: \(error.localizedDescription)")
             if let skError = error as? SKError {
-                print("StoreKit錯誤代碼: \(skError.code.rawValue)")
+                print("IAPManager | StoreKit 錯誤代碼: \(skError.code.rawValue)")
             }
             self.products = []
             self.errorMessage = error.localizedDescription
@@ -82,7 +82,7 @@ class IAPManager: NSObject, ObservableObject {
     
     /// 購買商品
     func purchase(_ product: Product) async throws {
-        print("開始購買商品: \(product.id)")
+        print("IAPManager | 開始購買商品: \(product.id)")
         do {
             let result = try await product.purchase()
             
@@ -90,7 +90,7 @@ class IAPManager: NSObject, ObservableObject {
             case .success(let verification):
                 switch verification {
                 case .verified(let transaction):
-                    print("購買成功，正在完成交易")
+                    print("IAPManager | 購買成功，正在完成交易")
                     // 完成交易
                     await transaction.finish()
                     
@@ -100,23 +100,23 @@ class IAPManager: NSObject, ObservableObject {
                     }
                     
                 case .unverified(_, let error):
-                    print("交易驗證失敗: \(error)")
+                    print("IAPManager | 交易驗證失敗: \(error)")
                     throw IAPError.verificationFailed
                 }
                 
             case .userCancelled:
-                print("用戶取消購買")
+                print("IAPManager | 用戶取消購買")
                 throw IAPError.purchaseFailed
                 
             case .pending:
-                print("購買待處理")
+                print("IAPManager | 購買待處理")
                 
             @unknown default:
-                print("未知的購買狀態")
+                print("IAPManager | 未知的購買狀態")
                 throw IAPError.unknown(NSError(domain: "IAPManager", code: -1))
             }
         } catch {
-            print("購買過程發生錯誤: \(error)")
+            print("IAPManager | 購買過程發生錯誤: \(error)")
             purchaseCompletion?(.failure(.purchaseFailed))
             throw IAPError.unknown(error)
         }
@@ -125,15 +125,15 @@ class IAPManager: NSObject, ObservableObject {
     /// 恢復購買
     @MainActor
     func restorePurchases() async {
-        print("開始恢復購買...")
+        print("IAPManager | 開始恢復購買...")
         do {
             for await result in Transaction.currentEntitlements {
                 if case .verified(let transaction) = result {
-                    print("恢復購買項目: \(transaction.productID)")
+                    print("IAPManager | 恢復購買項目: \(transaction.productID)")
                     self.purchasedProductIDs.insert(transaction.productID)
                 }
             }
-            print("恢復購買完成")
+            print("IAPManager | 恢復購買完成")
         }
     }
     
@@ -149,11 +149,11 @@ class IAPManager: NSObject, ObservableObject {
     
     /// 監聽交易更新
     private func observeTransactionUpdates() {
-        print("開始監聽交易更新")
+        print("IAPManager | 開始監聽交易更新")
         Task.detached { @MainActor in
             for await update in Transaction.updates {
                 if case .verified(let transaction) = update {
-                    print("接收到交易更新: \(transaction.productID)")
+                    print("IAPManager | 接收到交易更新: \(transaction.productID)")
                     // 處理交易更新
                     self.purchasedProductIDs.insert(transaction.productID)
                     await transaction.finish()
