@@ -88,6 +88,12 @@ class UserData: ObservableObject {
         }
     }
     
+    @Published var usingVersion: String {
+        didSet {
+            UserDefaults.standard.set(usingVersion, forKey: "usingVersion")
+        }
+    }
+    
     // MARK: 初始化
     
     init() {
@@ -98,6 +104,7 @@ class UserData: ObservableObject {
         self.displayMore = UserDefaults.standard.integer(forKey: "displayMore")
         self.analyzeCount = UserDefaults.standard.integer(forKey: "analyzeCount")
         self.notFirstUse = UserDefaults.standard.bool(forKey: "notFirstUse")
+        self.usingVersion = UserDefaults.standard.string(forKey: "usingVersion") ?? "v1.0.5"
     }
     
     // MARK: Functions

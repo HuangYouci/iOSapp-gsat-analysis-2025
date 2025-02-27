@@ -40,6 +40,9 @@ struct myProject01App: App {
             if !data.notFirstUse {
                 FirstInfoView()
                     .environmentObject(data)
+            } else if data.usingVersion != LevelConstants.programVersion {
+                NewVersionView()
+                    .environmentObject(data)
             } else {
                 ContentView()
                     .environmentObject(data)

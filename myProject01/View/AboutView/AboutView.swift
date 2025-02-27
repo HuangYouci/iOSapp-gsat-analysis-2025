@@ -26,10 +26,9 @@ struct AboutView: View {
     @State var favoriteDept: [deptListModel] = []
     @State private var rewardAd: RewardedAd?
     @State private var isAdLoaded = false
-    @State private var showPurchaseError = false
-    @State private var purchaseErrorMessage = ""
     @State private var adLoadMessage = ""
     @State private var isShowNoAdShowView = false
+    @State private var isShowBuyProView = false
     // --------------- //
     
     func loadRewardedAd() {
@@ -98,55 +97,24 @@ struct AboutView: View {
                         }
                         .padding(5)
                         
-                        HStack{
                             
-                            if data.userpurchased {
-                                HStack{
-                                    Text("感謝支持！現在已獲得無限次分析次數。")
-                                    Spacer()
-                                }
-                                
-                            } else {
-                                Text("購買付費方案支持開發以獲得無限次分析次數")
+                        if !data.userpurchased {
+                            
+                            HStack{
+                                Text("購買付費方案，享無限分析次數及更多功能")
                                 Spacer()
-                                
-                                Button {
-                                    // 執行購買操作
-                                    Task {
-                                        guard let product = IAPManager.shared.product(for: "myProject01_userpurchased") else {
-                                            purchaseErrorMessage = "商品未載入"
-                                            showPurchaseError = true
-                                            return
-                                        }
-                                        
-                                        do {
-                                            try await IAPManager.shared.purchase(product)
-                                            await MainActor.run {
-                                                data.userpurchased = true
-                                                data.analyzeCount = 2415919104
-                                            }
-                                        } catch {
-                                            await MainActor.run {
-                                                purchaseErrorMessage = error.localizedDescription
-                                                showPurchaseError = true
-                                            }
-                                        }
-                                        
-                                    }
-                                    
+                                Button(role: .none){
+                                    isShowBuyProView = true
                                 } label: {
-                                    Text("購買")
+                                    Text("查看")
                                 }
                                 .buttonStyle(.borderedProminent)
-                                
                             }
+                            .padding(10)
+                            .background(Color(.secondarySystemGroupedBackground).opacity(0.5))
+                            .cornerRadius(10)
                             
                         }
-                        .padding(10)
-                        .background(Color(.secondarySystemGroupedBackground).opacity(0.5))
-                        .cornerRadius(10)
-                        
-                        if !purchaseErrorMessage.isEmpty { Text(purchaseErrorMessage).foregroundStyle(Color(.red)) }
                         
                         Divider()
                         
@@ -336,13 +304,11 @@ struct AboutView: View {
             }
             loadRewardedAd()
         }
-        .alert("購買失敗", isPresented: $showPurchaseError) {
-                Button("確定", role: .cancel) { }
-            } message: {
-                Text(purchaseErrorMessage)
-        }
         .sheet(isPresented: $isShowNoAdShowView) {
             NoAdShowView()
+        }
+        .sheet(isPresented: $isShowBuyProView) {
+            BuyProView()
         }
         
     }
