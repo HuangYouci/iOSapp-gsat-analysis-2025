@@ -1,5 +1,5 @@
 //
-//  Data.swift
+//  UserData.swift
 //  myProject01
 //
 //  Created by 黃宥琦 on 2025/2/7.
@@ -26,7 +26,7 @@ struct gradeData: Identifiable, Codable {
     var gradeSKT: Int
 }
 
-class UserDef: ObservableObject {
+class UserData: ObservableObject {
     
     // 用戶名稱
     
@@ -72,12 +72,6 @@ class UserDef: ObservableObject {
         }
     }
     
-    @Published var favoriteDept: [String] {
-        didSet {
-            UserDefaults.standard.set(favoriteDept, forKey: "favoriteDept")
-        }
-    }
-    
     // 可分析次數
     
     @Published var analyzeCount: Int {
@@ -86,7 +80,7 @@ class UserDef: ObservableObject {
         }
     }
     
-    // 開過沒
+    // 開過沒、更新沒
     
     @Published var notFirstUse: Bool {
         didSet {
@@ -102,7 +96,6 @@ class UserDef: ObservableObject {
         self.userpurchased = UserDefaults.standard.bool(forKey: "userpurchased")
         self.userResultData = Self.loadUserResultData() ?? [gradeData(gradeCH: 11, gradeEN: 14, gradeMA: 7, gradeMB: 11, gradeSC: 12, gradeSO: 11, gradeEL: 1, gradePC: 3, gradePP: 3, gradeSK1: 0, gradeSK2: 0, gradeSK3: 0, gradeSK4: 0, gradeSK5: 0, gradeSKT: 0)]
         self.displayMore = UserDefaults.standard.integer(forKey: "displayMore")
-        self.favoriteDept = UserDefaults.standard.array(forKey: "favoriteDept") as? [String] ?? []
         self.analyzeCount = UserDefaults.standard.integer(forKey: "analyzeCount")
         self.notFirstUse = UserDefaults.standard.bool(forKey: "notFirstUse")
     }

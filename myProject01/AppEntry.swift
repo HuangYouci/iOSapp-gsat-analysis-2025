@@ -14,7 +14,8 @@ struct myProject01App: App {
     // --------------- //
     // EnvironmentObject
     // StateObject
-    @StateObject private var data = UserDef()
+    @StateObject private var data = UserData()
+    @StateObject private var favData = UserFavData()
     @StateObject private var deptList = DeptDataModel()
     @StateObject private var databaseInfo = DatabaseInfo()
     @StateObject private var iapManager = IAPManager.shared
@@ -42,11 +43,12 @@ struct myProject01App: App {
             } else {
                 ContentView()
                     .environmentObject(data)
+                    .environmentObject(favData)
                     .environmentObject(deptList)
                     .environmentObject(databaseInfo)
                     .environmentObject(iapManager)
             }
-        }        
+        }
     }
     
 }

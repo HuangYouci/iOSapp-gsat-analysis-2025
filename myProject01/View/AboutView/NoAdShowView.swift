@@ -11,7 +11,7 @@ struct NoAdShowView: View {
     
     // --------------- //
     // EnvironmentObject
-    @EnvironmentObject var data: UserDef
+    @EnvironmentObject var data: UserData
     @EnvironmentObject private var databaseInfo: DatabaseInfo
     // StateObject
     // Binding

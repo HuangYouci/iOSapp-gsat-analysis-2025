@@ -11,7 +11,7 @@ struct FirstInfoView: View {
     
     // --------------- //
     // EnvironmentObject
-    @EnvironmentObject var data: UserDef
+    @EnvironmentObject var data: UserData
     // StateObject
     // Binding
     // State

@@ -4,7 +4,7 @@ struct ContentView: View {
     // --------------- //
     // EnvironmentObject
     // StateObject
-    @EnvironmentObject private var data: UserDef
+    @EnvironmentObject private var data: UserData
     @EnvironmentObject private var deptList: DeptDataModel
     @EnvironmentObject private var databaseInfo: DatabaseInfo
     // Binding

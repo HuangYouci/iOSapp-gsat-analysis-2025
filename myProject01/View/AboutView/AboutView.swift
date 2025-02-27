@@ -10,11 +10,10 @@ import GoogleMobileAds
 
 struct AboutView: View {
     
-    
-    
     // --------------- //
     // EnvironmentObject
-    @EnvironmentObject var data: UserDef
+    @EnvironmentObject var data: UserData
+    @EnvironmentObject var favData: UserFavData
     @EnvironmentObject var deptList: DeptDataModel
     @EnvironmentObject var databaseInfo: DatabaseInfo
     // StateObject
@@ -333,7 +332,7 @@ struct AboutView: View {
         }
         .onAppear {
             favoriteDept = deptList.departments.filter { dept in
-                data.favoriteDept.contains(dept.id)
+                favData.favoriteDept.contains(dept.id)
             }
             loadRewardedAd()
         }

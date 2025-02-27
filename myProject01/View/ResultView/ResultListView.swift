@@ -11,7 +11,7 @@ struct ResultListView: View {
     
     // --------------- //
     // EnvironmentObject
-    @EnvironmentObject var data: UserDef
+    @EnvironmentObject var data: UserData
     @EnvironmentObject var deptList: DeptDataModel
     // StateObject
     // Binding

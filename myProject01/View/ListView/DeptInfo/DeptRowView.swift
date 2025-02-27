@@ -11,7 +11,8 @@ struct DeptRowView: View {
     
     // --------------- //
     // EnvironmentObject
-    @EnvironmentObject var data: UserDef
+    @EnvironmentObject var data: UserData
+    @EnvironmentObject var favData: UserFavData
     // StateObject
     // Binding
     // State
@@ -21,8 +22,6 @@ struct DeptRowView: View {
     var department: deptListModel
     
     var body: some View {
-        
-        var isFavorite: Bool = false
         
         VStack {
             HStack{
@@ -49,13 +48,13 @@ struct DeptRowView: View {
         .contextMenu{
                     
                     Button(role: .none){
-                        if data.favoriteDept.contains(department.id) {
-                            data.favoriteDept.remove(at: Int(data.favoriteDept.firstIndex(of: department.id)!))
+                        if favData.favoriteDept.contains(department.id) {
+                            favData.favoriteDept.remove(at: Int(favData.favoriteDept.firstIndex(of: department.id)!))
                         } else {
-                            data.favoriteDept.append(department.id)
+                            favData.favoriteDept.append(department.id)
                         }
                     } label: {
-                        Label(data.favoriteDept.contains(department.id) ? "移除最愛" : "加入最愛", systemImage: data.favoriteDept.contains(department.id) ? "heart.fill" : "heart")
+                        Label(favData.favoriteDept.contains(department.id) ? "移除最愛" : "加入最愛", systemImage: favData.favoriteDept.contains(department.id) ? "heart.fill" : "heart")
                     }
                     
                     Button(role: .none){
@@ -72,17 +71,6 @@ struct DeptRowView: View {
         } message: {
             Text("已將科系資訊分享圖片儲存至相簿")
         }
-        .onAppear {
-            isFavorite = data.favoriteDept.contains(department.id)
-        }
-        .onChange(of: isFavorite) { _ in
-            // 在视图消失时同步到环境对象
-            if isFavorite && !data.favoriteDept.contains(department.id) {
-                data.favoriteDept.append(department.id)
-            }
-            if !isFavorite && data.favoriteDept.contains(department.id) {
-                data.favoriteDept.remove(at: Int(data.favoriteDept.firstIndex(of: department.id)!))
-            }
-        }
+        
     }
 }
