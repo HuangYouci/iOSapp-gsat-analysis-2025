@@ -92,24 +92,6 @@ struct BuyProView: View {
                     VStack() {
                         
                         HStack{
-                            Text("🤔 志願科系平均分數 [開發中]")
-                                .font(.title3)
-                                .bold()
-                            Spacer()
-                        }
-                        
-                        HStack{
-                            Text("可觀看所有同學將某校系設為志願的平均級分，更多資料幫助你更好判斷。")
-                            Spacer()
-                        }
-                    }
-                    .padding(10)
-                    .background(Color(.systemGroupedBackground))
-                    .cornerRadius(10)
-                    
-                    VStack() {
-                        
-                        HStack{
                             Text("❤️ 滿滿的支持")
                                 .font(.title3)
                                 .bold()

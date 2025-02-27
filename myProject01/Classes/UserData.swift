@@ -114,7 +114,6 @@ class UserData: ObservableObject {
     func addNewResultData(gradeCH: Int = 0, gradeEN: Int = 0, gradeMA: Int = 0, gradeMB: Int = 0, gradeSC: Int = 0, gradeSO: Int = 0, gradeEL: Int = 0, gradePC: Int = 0, gradePP: Int = 0, gradeSK1: Int = 0, gradeSK2: Int = 0, gradeSK3: Int = 0, gradeSK4: Int = 0, gradeSK5: Int = 0, gradeSKT: Int = 0) {
         let appendData = gradeData(gradeCH: gradeCH, gradeEN: gradeEN, gradeMA: gradeMA, gradeMB: gradeMB, gradeSC: gradeSC, gradeSO: gradeSO, gradeEL: gradeEL, gradePC: gradePC, gradePP: gradePP, gradeSK1: gradeSK1, gradeSK2: gradeSK2, gradeSK3: gradeSK3, gradeSK4: gradeSK4, gradeSK5: gradeSK5, gradeSKT: gradeSKT)
         userResultData.append(appendData)
-        print(userResultData)
     }
     
     // 重置所有資料
