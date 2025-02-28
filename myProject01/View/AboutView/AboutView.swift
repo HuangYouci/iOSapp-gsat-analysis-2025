@@ -225,6 +225,22 @@ struct AboutView: View {
                         
                         Divider()
                         
+                        NavigationLink(destination: ChoiceView()){
+                            HStack{
+                                
+                                Spacer()
+                                
+                                Text("志願列表")
+                                    .foregroundStyle(Color.accentColor)
+                                
+                                Spacer()
+                                
+                            }
+                            .padding(5)
+                        }
+                        
+                        Divider()
+                        
                         NavigationLink(destination: FirstInfoView()){
                             HStack{
                                 

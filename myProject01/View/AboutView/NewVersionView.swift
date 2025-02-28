@@ -52,7 +52,7 @@ struct NewVersionView: View {
                 VStack() {
                     
                     HStack{
-                        Text("付費用戶，這錢值得。")
+                        Text("深思熟慮，再選擇")
                             .font(.title3)
                             .bold()
                         Spacer()
@@ -61,11 +61,11 @@ struct NewVersionView: View {
                     Image("Update1")
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 300)
+                        .frame(height: 200)
                         .padding(.vertical, 10)
                     
                     HStack{
-                        Text("現在起，付費用戶除了可享無限次分析次數外，更可在「分析」結果頁編輯各分析結果的名稱，讓各個結果更好辨識。想要記住朋友的成績？完全沒問題。")
+                        Text("新功能！現在長按目標科系，除了可以將其加入「最愛清單」外，更可加入「志願清單」。")
                         Spacer()
                     }
                 }
@@ -76,25 +76,7 @@ struct NewVersionView: View {
                 VStack() {
                     
                     HStack{
-                        Text("錯誤修正")
-                            .font(.title3)
-                            .bold()
-                        Spacer()
-                    }
-                    
-                    HStack{
-                        Text("經用戶反饋發現，在分析結果點擊「加入最愛」按鈕後，會退出當前視窗。此問題已被解決。")
-                        Spacer()
-                    }
-                }
-                .padding(10)
-                .background(Color(.systemGroupedBackground))
-                .cornerRadius(10)
-                
-                VStack() {
-                    
-                    HStack{
-                        Text("功能提示")
+                        Text("志願序，清楚明瞭")
                             .font(.title3)
                             .bold()
                         Spacer()
@@ -103,11 +85,11 @@ struct NewVersionView: View {
                     Image("Update2")
                         .resizable()
                         .scaledToFit()
-                        .frame(height: 150)
+                        .frame(height: 300)
                         .padding(.vertical, 10)
                     
                     HStack{
-                        Text("還不知道要如何把科系加入最愛清單嗎？只要在科系清單長按目標校系，即可跳出選單：「加入最愛」或「分享」。")
+                        Text("志願清單鎖定僅能填寫六個校系，幫助您更好鎖定志願序。我們推薦用戶可以先加入最愛清單，和老師、同學討論後再從最愛清單選擇六志願加入。也可直接截圖六志願清單和朋友分享。")
                         Spacer()
                     }
                 }

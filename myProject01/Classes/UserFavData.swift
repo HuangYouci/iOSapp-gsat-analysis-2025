@@ -50,4 +50,16 @@ class UserFavData: ObservableObject {
         return false
     }
     
+    func addChoiceDept(deptID: String) -> String {
+        if choiceDept.contains(deptID) {
+            choiceDept.remove(at: Int(choiceDept.firstIndex(of: deptID)!))
+            return "已成功將此校系移出志願"
+        } else if choiceDept.count == 6 {
+            return "加入失敗！您的志願已經超過六個校系，請到「志願選填」把其他志願刪除，再加入本校系。如果只是加入參考，請使用「最愛校系」功能。"
+        } else {
+            choiceDept.append(deptID)
+            return "已成功將此校系加入志願列表，請到「志願選填」查看所有志願"
+        }
+    }
+    
 }

@@ -8,7 +8,7 @@
 struct LevelConstants {
     
     // 應用程式版本
-    static var programVersion: String = "v1.0.6"
+    static var programVersion: String = "v1.0.7"
 
     // 國文
     static var CHLevel1: Int = 13 // 頂標
