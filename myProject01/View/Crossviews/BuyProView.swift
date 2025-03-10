@@ -113,6 +113,22 @@ struct BuyProView: View {
             }
             .padding()
             
+            if !bought {
+                Button {
+                    Task {
+                        await IAPManager.shared.restorePurchases()
+                    }
+                } label: {
+                    HStack{
+                        Spacer()
+                        Text("恢復購買")
+                        Spacer()
+                    }
+                    .foregroundStyle(Color(.systemGray2))
+                }
+                .buttonStyle(.plain)
+            }
+            
             Button {
                 
                 Task {
