@@ -271,6 +271,7 @@ struct FirstInfoView: View {
             if !data.notFirstUse {
                 HStack {
                     Button(role: .none){
+                        data.usingVersion = LevelConstants.programVersion
                         data.notFirstUse = true
                     } label: {
                         Spacer()
