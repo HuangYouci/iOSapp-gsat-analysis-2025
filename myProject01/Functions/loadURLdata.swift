@@ -11,7 +11,7 @@ func loadURLData(databaseInfo: DatabaseInfo) async {
     
     // 嘗試載入資料
     do {
-        let url = URL(string: "https://huangyouci.github.io/appdata/myProject01.txt")!
+        let url = URL(string: "https://huangyouci.github.io/appdata/myProject01/data.txt")!
         
         // 建立 URLRequest 並設定快取策略
         var request = URLRequest(url: url)

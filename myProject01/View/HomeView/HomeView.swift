@@ -80,10 +80,13 @@ struct HomeView: View {
                 }
                 .padding(.bottom,10)
                 
-                Text("輸入規則：於國文、英文、數Ａ、數Ｂ、自然、社會，請輸入 0 到 15 的整數（您的成績級分），如果您未報考該科，請輸入 0 級分；於英聽，請選擇 A/B/C/F 級。")
-                    .font(.caption)
-                    .opacity(0.5)
-                    .padding(.bottom,10)
+                HStack{
+                    Text("於國文、英文、數Ａ、數Ｂ、自然、社會，請輸入 0 到 15 的整數（您的成績級分），如果您未報考該科，請輸入 0 級分；於英聽，請選擇 A/B/C/F 級。")
+                        .font(.caption)
+                        .opacity(0.5)
+                        .padding(.bottom,10)
+                    Spacer()
+                }
                 
                 VStack{
                     
@@ -142,7 +145,10 @@ struct HomeView: View {
                 
                 HStack{
                     Text(databaseInfo.announcement)
+                    Spacer()
                 }
+                .font(.caption)
+                .opacity(0.5)
                 .padding(.top, 10)
                 
             }

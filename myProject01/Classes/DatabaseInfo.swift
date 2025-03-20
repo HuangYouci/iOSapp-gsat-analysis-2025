@@ -14,8 +14,8 @@ class DatabaseInfo: ObservableObject {
     @Published var adMessage: String
     
     // 初始化
-    init(version: String = "114 年 (更新於 2025/02/25)",
-         announcement: String = "無法連線到資料庫，目前五標為 114 年資料。請確保連上網路，嘗試重新載入 App。如果狀況持續，請聯絡開發者。",
+    init(version: String = "114年（離線版）",
+         announcement: String = "無法連線到資料庫，目前五標為 114 年資料。請確保連上網路，嘗試重新載入或更新 App。如果狀況持續，請聯絡開發者。",
          adMessage: String = "null")
     {
         self.version = version

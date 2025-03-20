@@ -29,3 +29,7 @@ extension View {
     }
 
 }
+
+extension URL: @retroactive Identifiable {
+    public var id: String { self.absoluteString }
+}
