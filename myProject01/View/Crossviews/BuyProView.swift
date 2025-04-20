@@ -32,7 +32,7 @@ struct BuyProView: View {
                     .frame(width: 70, height: 70)
                 
                 VStack(alignment: .leading){
-                    Text("學測個申分析系統")
+                    Text("學測個申分析")
                         .font(.title)
                         .bold()
                     Text("購買付費用戶方案")

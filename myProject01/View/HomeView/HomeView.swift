@@ -58,35 +58,130 @@ struct HomeView: View {
     
     var body: some View {
         
-        VStack{
+        VStack(spacing: 0){
             
             HStack{
-                Text("學測個人申請分析系統")
-                    .font(.title)
+                Text("學測個申分析")
+                    .font(.largeTitle)
                     .bold()
                 Spacer()
             }
-            .padding(.bottom)
+            .padding(.horizontal)
+            .padding(.bottom, 10)
+            
+            VStack{
+                VStack(alignment: .leading){
+                    HStack(alignment: .center){
+                        VStack{
+                            Text({
+                                let now = Date()
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateFormat = "MMM"
+                                dateFormatter.timeZone = TimeZone.current // 可選
+                                return dateFormatter.string(from: now)
+                            }())
+                            .font(.caption)
+                            Text({
+                                let now = Date()
+                                let dateFormatter = DateFormatter()
+                                dateFormatter.dateFormat = "dd"
+                                dateFormatter.timeZone = TimeZone.current // 可選
+                                return dateFormatter.string(from: now)
+                            }())
+                            .font(.title3)
+                            .bold()
+                        }
+                        .padding(1)
+                        .foregroundStyle(Color(.red))
+                        Circle()
+                            .fill(Color(.label).opacity(0.5))
+                            .frame(width: 5, height: 5)
+                            .padding(.horizontal, 3)
+                        VStack{
+                            Text("學測倒數")
+                                .font(.caption)
+                            Text({
+                                let components = Calendar.current.dateComponents([.day], from: Date(), to: Date(timeIntervalSince1970: 1769385600))
+                                
+                                if let days = components.day {
+                                    if days > 0 {
+                                        return "\(days)"
+                                    } else {
+                                        return "--"
+                                    }
+                                } else {
+                                    return "??"
+                                }
+                            }())
+                            .font(.title3)
+                            .bold()
+                        }
+                        VStack{
+                            Text("成績公布")
+                                .font(.caption)
+                            Text({
+                                let components = Calendar.current.dateComponents([.day], from: Date(), to: Date(timeIntervalSince1970: 1771977600))
+                                
+                                if let days = components.day {
+                                    if days > 0 {
+                                        return "\(days)"
+                                    } else {
+                                        return "--"
+                                    }
+                                } else {
+                                    return "??"
+                                }
+                            }())
+                            .font(.title3)
+                            .bold()
+                        }
+                        Circle()
+                            .fill(Color(.label).opacity(0.5))
+                            .frame(width: 5, height: 5)
+                            .padding(.horizontal, 3)
+                        VStack{
+                            Text("分析次數")
+                                .font(.caption)
+                            Text("\(data.analyzeCount)")
+                                .font(.title3)
+                                .bold()
+                        }
+                        Spacer()
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 10)
+                .background(Color(.systemBackground))
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: 0,
+                        bottomLeadingRadius: 20,
+                        bottomTrailingRadius: 20,
+                        topTrailingRadius: 0
+                    )
+                )
+            }
+            .background(Color(.secondarySystemBackground))
             
             ScrollView {
                 
+                Color.clear
+                    .padding(.bottom, 5)
+                
                 HStack{
                     Image(systemName: "square.and.pencil")
-                        .opacity(0.5)
                     Text("成績輸入")
-                        .opacity(0.5)
-                    
                     Spacer()
                 }
                 .padding(.bottom,10)
+                .padding(.horizontal)
+                .foregroundStyle(Color(.systemGray))
                 
-                HStack{
-                    Text("於國文、英文、數Ａ、數Ｂ、自然、社會，請輸入 0 到 15 的整數（您的成績級分），如果您未報考該科，請輸入 0 級分；於英聽，請選擇 A/B/C/F 級。")
-                        .font(.caption)
-                        .opacity(0.5)
-                        .padding(.bottom,10)
-                    Spacer()
-                }
+                Text("請輸入 0 到 15 的整數（您的成績級分），如果您未報考該科，請輸入 0 級分；於英聽，請選擇 A/B/C/F 級。")
+                    .font(.caption)
+                    .padding(.bottom, 10)
+                    .padding(.horizontal)
+                    .foregroundStyle(Color(.systemGray))
                 
                 VStack{
                     
@@ -123,10 +218,9 @@ struct HomeView: View {
                             
                             
                         }
-                        .pickerStyle(MenuPickerStyle())
                         .padding(5)
                         .padding(.horizontal, 5)
-                        .background(Color(.quaternarySystemFill))
+                        .background(Color(.systemBackground))
                         .cornerRadius(10)
                         
                         Spacer()
@@ -142,125 +236,123 @@ struct HomeView: View {
                     }
                     
                 }
+                .padding(.horizontal)
                 
-                HStack{
-                    Text(databaseInfo.announcement)
-                    Spacer()
-                }
+                Text(databaseInfo.announcement)
                 .font(.caption)
-                .opacity(0.5)
                 .padding(.top, 10)
+                .padding(.horizontal)
+                .foregroundStyle(Color(.systemGray))
                 
             }
+            .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
+            .background(Color(.secondarySystemBackground))
                 
-            if isFinishedForm {
-                
-                HStack{
-                    Image(systemName: "checkmark.seal.fill")
-                        .foregroundColor(.green)
-                    Text("成績輸入完成")
-                        .foregroundColor(.green)
-                    
-                    Spacer()
-                }
-                .padding(.bottom, 5)
-                
-                HStack{
-                    Text("成績已輸入完成，資料已經新增。快到「分析」結果頁選擇該筆分析結果，查看詳細分析！")
-                        .font(.caption)
-                        .opacity(0.5)
-                    Spacer()
-                }
-                
-                Button(role: .none) {
-                    selectedTab = 1
-                } label : {
-                    Spacer()
-                    
-                    Text("查看分析結果")
-                    
-                    Spacer()
-                }
-                .clipShape(Capsule())
-                .buttonStyle(.borderedProminent)
-                .padding()
-                
-            } else {
-                
-                if data.analyzeCount < 1 {
+            VStack{
+                if isFinishedForm {
                     
                     HStack{
-                        Image(systemName: "exclamationmark.triangle")
-                            .foregroundColor(.red)
-                        Text("分析次數不足")
-                            .foregroundColor(.red)
+                        Image(systemName: "checkmark.seal.fill")
+                            .foregroundColor(.green)
+                        Text("成績輸入完成")
+                            .foregroundColor(.green)
                         
                         Spacer()
                     }
-                    .padding(.bottom,5)
+                    .padding(.bottom, 5)
                     
                     HStack{
-                        Text("目前沒有分析次數了，可透過觀看廣告來獲得觀看次數。到「關於」頁面查看剩餘的分析次數，或是購買付費用戶等級來獲得無限分析次數。")
+                        Text("成績已新增，到「分析」結果頁選擇該筆分析結果以查看詳細分析！")
                             .font(.caption)
-                            .opacity(0.5)
+                            .foregroundStyle(Color(.systemGray))
                         Spacer()
                     }
                     
                     Button(role: .none) {
-                        
-                        hideKeyboard()
-                        selectedTab = 2
-                        
+                        selectedTab = 1
                     } label : {
                         Spacer()
                         
-                        Text("前往「關於」頁面")
+                        Text("查看分析結果")
                         
                         Spacer()
                     }
                     .clipShape(Capsule())
                     .buttonStyle(.borderedProminent)
-                    .padding()
                     
                 } else {
                     
-                    Button(role: .none) {
+                    if data.analyzeCount < 1 {
                         
-                        hideKeyboard()
-                        data.addNewResultData(gradeCH: Int(EditingGradeCH) ?? 0 , gradeEN: Int(EditingGradeEN) ?? 0 , gradeMA: Int(EditingGradeMA) ?? 0 , gradeMB: Int(EditingGradeMB) ?? 0 , gradeSC: Int(EditingGradeSC) ?? 0 , gradeSO: Int(EditingGradeSO) ?? 0 , gradeEL: EditingGradeEL, gradePC: EditingGradePC, gradePP: EditingGradePP, gradeSK1: Int(EditingGradeSK1) ?? 0 , gradeSK2: Int(EditingGradeSK2) ?? 0 , gradeSK3: Int(EditingGradeSK3) ?? 0 , gradeSK4: Int(EditingGradeSK4) ?? 0 , gradeSK5: Int(EditingGradeSK5) ?? 0 , gradeSKT: EditingGradeSKT)
-                        isFinishedForm = true
-                        data.analyzeCount -= 1
+                        HStack{
+                            Image(systemName: "exclamationmark.triangle")
+                                .foregroundColor(.red)
+                            Text("分析次數不足")
+                                .foregroundColor(.red)
+                            
+                            Spacer()
+                        }
+                        .padding(.bottom,5)
                         
-                    } label : {
-                        Spacer()
+                        Text("目前沒有分析次數了，可透過觀看廣告來獲得觀看次數，或是購買付費用戶等級來獲得無限分析次數。")
+                            .font(.caption)
+                            .foregroundStyle(Color(.systemGray))
                         
-                        Text("提交")
+                        Button(role: .none) {
+                            
+                            hideKeyboard()
+                            selectedTab = 2
+                            
+                        } label : {
+                            Spacer()
+                            
+                            Text("前往「關於」頁面")
+                            
+                            Spacer()
+                        }
+                        .clipShape(Capsule())
+                        .buttonStyle(.borderedProminent)
                         
-                        Spacer()
+                    } else {
+                        
+                        Button(role: .none) {
+                            
+                            hideKeyboard()
+                            data.addNewResultData(gradeCH: Int(EditingGradeCH) ?? 0 , gradeEN: Int(EditingGradeEN) ?? 0 , gradeMA: Int(EditingGradeMA) ?? 0 , gradeMB: Int(EditingGradeMB) ?? 0 , gradeSC: Int(EditingGradeSC) ?? 0 , gradeSO: Int(EditingGradeSO) ?? 0 , gradeEL: EditingGradeEL, gradePC: EditingGradePC, gradePP: EditingGradePP, gradeSK1: Int(EditingGradeSK1) ?? 0 , gradeSK2: Int(EditingGradeSK2) ?? 0 , gradeSK3: Int(EditingGradeSK3) ?? 0 , gradeSK4: Int(EditingGradeSK4) ?? 0 , gradeSK5: Int(EditingGradeSK5) ?? 0 , gradeSKT: EditingGradeSKT)
+                            isFinishedForm = true
+                            data.analyzeCount -= 1
+                            
+                        } label : {
+                            Spacer()
+                            
+                            Text("提交")
+                            
+                            Spacer()
+                        }
+                        .clipShape(Capsule())
+                        .buttonStyle(.borderedProminent)
+                        .disabled(
+                            !isValidGrade(EditingGradeCH) ||
+                            !isValidGrade(EditingGradeMA) ||
+                            !isValidGrade(EditingGradeMB) ||
+                            !isValidGrade(EditingGradeSC) ||
+                            !isValidGrade(EditingGradeSO) ||
+                            !isValidGrade(EditingGradeEN) ||
+                            !isValidGradeSK(EditingGradeSK1) ||
+                            !isValidGradeSK(EditingGradeSK2) ||
+                            !isValidGradeSK(EditingGradeSK3) ||
+                            !isValidGradeSK(EditingGradeSK4) ||
+                            !isValidGradeSK(EditingGradeSK5) || data.analyzeCount < 1
+                        )
+                        
                     }
-                    .clipShape(Capsule())
-                    .buttonStyle(.borderedProminent)
-                    .disabled(
-                        !isValidGrade(EditingGradeCH) ||
-                        !isValidGrade(EditingGradeMA) ||
-                        !isValidGrade(EditingGradeMB) ||
-                        !isValidGrade(EditingGradeSC) ||
-                        !isValidGrade(EditingGradeSO) ||
-                        !isValidGrade(EditingGradeEN) ||
-                        !isValidGradeSK(EditingGradeSK1) ||
-                        !isValidGradeSK(EditingGradeSK2) ||
-                        !isValidGradeSK(EditingGradeSK3) ||
-                        !isValidGradeSK(EditingGradeSK4) ||
-                        !isValidGradeSK(EditingGradeSK5) || data.analyzeCount < 1
-                    )
-                    .padding()
                     
                 }
-                
             }
+            .padding()
+            .background(Color(.secondarySystemBackground))
             
         }
-        .padding()
         .sheet(isPresented: $showOtherSubjectView){
             OtherSubjectChooseView(EditingGradePC: $EditingGradePC, EditingGradePP: $EditingGradePP, EditingGradeSK1: $EditingGradeSK1, EditingGradeSK2: $EditingGradeSK2, EditingGradeSK3: $EditingGradeSK3, EditingGradeSK4: $EditingGradeSK4, EditingGradeSK5: $EditingGradeSK5, EditingGradeSKT: $EditingGradeSKT, showOtherSubjectView: $showOtherSubjectView)
         }
@@ -306,7 +398,7 @@ struct HomeView: View {
     }
     
     private func gradeInputView(label: String, grade: Binding<String>, field: Field) -> some View {
-            return HStack {
+            HStack {
                 Text(label)
                     .foregroundColor(.accentColor)
                 TextField("0 至 15", text: grade)
@@ -333,7 +425,7 @@ struct HomeView: View {
                     .foregroundColor(Color(.systemGray2))
             }
             .padding(10)
-            .background(Color(.quaternarySystemFill))
+            .background(Color(.systemBackground))
             .cornerRadius(10)
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
@@ -344,3 +436,8 @@ struct HomeView: View {
         }
 }
 
+#Preview {
+    HomeView(selectedTab: .constant(1))
+        .environmentObject(DatabaseInfo())
+        .environmentObject(UserData())
+}

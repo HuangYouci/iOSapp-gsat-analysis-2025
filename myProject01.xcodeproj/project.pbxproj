@@ -308,13 +308,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = myProject01/myProject01.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "myProject01/Preview\\ Content myProject01/View/AboutView/FirstInfoAsset.xcassets";
 				DEVELOPMENT_TEAM = NSPJ9RY42B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = myProject01/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "學測個申分析系統";
+				INFOPLIST_KEY_CFBundleDisplayName = "學測個申分析";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "需要存取相冊權限，才能將圖片存入相冊";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -326,7 +326,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangyouci.myProject01;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -342,13 +342,13 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = myProject01/myProject01.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "myProject01/Preview\\ Content myProject01/View/AboutView/FirstInfoAsset.xcassets";
 				DEVELOPMENT_TEAM = NSPJ9RY42B;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = myProject01/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "學測個申分析系統";
+				INFOPLIST_KEY_CFBundleDisplayName = "學測個申分析";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "需要存取相冊權限，才能將圖片存入相冊";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -360,7 +360,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.huangyouci.myProject01;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

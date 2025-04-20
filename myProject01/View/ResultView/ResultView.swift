@@ -13,6 +13,7 @@ struct ResultView : View {
     // --------------- //
     // EnvironmentObject
     @EnvironmentObject var deptList: DeptDataModel
+    @EnvironmentObject var favData: UserFavData
     // StateObject
     // Binding
     // State
@@ -91,72 +92,74 @@ struct ResultView : View {
     
     var body: some View {
         
-        VStack{
+        VStack(spacing: 0){
             
             HStack{
-                Text("分析結果")
-                    .font(.title)
-                    .bold()
-                Spacer()
-            }
-            .padding(.bottom)
-            
-            HStack{
-                Image(systemName: "list.bullet.clipboard")
-                    .opacity(0.5)
-                Text("您的成績")
-                    .opacity(0.5)
-                Spacer()
-            }
-            .padding(.bottom,10)
-            
-            HStack{
-                
-                ScrollView(.horizontal, showsIndicators: false) {
-                    Grid {
-                        GridRow{
-                            Text("國文")
-                            Text("英文")
-                            Text("數Ａ")
-                            Text("數Ｂ")
-                            Text("自然")
-                            Text("社會")
-                            Text("英聽")
-                            Text("程設觀念")
-                            Text("程設實作")
-                        }
-                        GridRow{
-                            Text("\(data.gradeCH)")
-                            Text("\(data.gradeEN)")
-                            Text("\(data.gradeMA)")
-                            Text("\(data.gradeMB)")
-                            Text("\(data.gradeSC)")
-                            Text("\(data.gradeSO)")
-                            Text("\(transformELintToString(data.gradeEL))")
-                            Text("\(data.gradePC) 級")
-                            Text("\(data.gradePP) 級")
-                        }
+                if let name = favData.getGradeName(for: data) {
+                    Text(name)
+                        .font(.title)
                         .bold()
+                    Spacer()
+                } else {
+                    Text("分析結果")
+                        .font(.title)
+                        .bold()
+                    Spacer()
+                }
+            }
+            .padding(.horizontal)
+            .padding(.bottom, 10)
+            
+            VStack{
+                VStack(alignment: .leading){
+                    HStack(alignment: .center){
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            Grid {
+                                GridRow{
+                                    Text("國文")
+                                    Text("英文")
+                                    Text("數Ａ")
+                                    Text("數Ｂ")
+                                    Text("自然")
+                                    Text("社會")
+                                    Text("英聽")
+                                    Text("程設觀念")
+                                    Text("程設實作")
+                                }
+                                GridRow{
+                                    Text("\(data.gradeCH)")
+                                    Text("\(data.gradeEN)")
+                                    Text("\(data.gradeMA)")
+                                    Text("\(data.gradeMB)")
+                                    Text("\(data.gradeSC)")
+                                    Text("\(data.gradeSO)")
+                                    Text("\(transformELintToString(data.gradeEL))")
+                                    Text("\(data.gradePC) 級")
+                                    Text("\(data.gradePP) 級")
+                                }
+                                .bold()
+                            }
+                        }
                     }
                 }
-                
+                .padding(.horizontal)
+                .padding(.bottom, 10)
+                .background(Color(.systemBackground))
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: 0,
+                        bottomLeadingRadius: 20,
+                        bottomTrailingRadius: 20,
+                        topTrailingRadius: 0
+                    )
+                )
             }
-            .padding(10)
-            .background(Color(.quaternarySystemFill))
-            .cornerRadius(10)
-            .padding(.bottom,10)
-            
-            HStack{
-                Image(systemName: "checkmark.seal.fill")
-                    .opacity(0.5)
-                Text("分析結果")
-                    .opacity(0.5)
-                
-                Spacer()
-            }
-            .padding(.bottom,10)
+            .background(Color(.secondarySystemBackground))
             
             ScrollView {
+                
+                Color.clear
+                    .padding(.bottom, 5)
                 
                 LazyVStack{
                     
@@ -181,8 +184,9 @@ struct ResultView : View {
                         }
                         .padding(10)
                         .background(Color.orange.opacity(0.1))
-                        .background(Color(.quaternarySystemFill))
+                        .background(Color(.systemBackground))
                         .cornerRadius(10)
+                        .padding(.horizontal)
                     }
                     .buttonStyle(PlainButtonStyle())
                     
@@ -207,8 +211,9 @@ struct ResultView : View {
                         }
                         .padding(10)
                         .background(Color.purple.opacity(0.1))
-                        .background(Color(.quaternarySystemFill))
+                        .background(Color(.systemBackground))
                         .cornerRadius(10)
+                        .padding(.horizontal)
                     }
                     .buttonStyle(PlainButtonStyle())
                     
@@ -233,8 +238,9 @@ struct ResultView : View {
                         }
                         .padding(10)
                         .background(Color.blue.opacity(0.1))
-                        .background(Color(.quaternarySystemFill))
+                        .background(Color(.systemBackground))
                         .cornerRadius(10)
+                        .padding(.horizontal)
                     }
                     .buttonStyle(PlainButtonStyle())
                     
@@ -259,8 +265,9 @@ struct ResultView : View {
                         }
                         .padding(10)
                         .background(Color.green.opacity(0.1))
-                        .background(Color(.quaternarySystemFill))
+                        .background(Color(.systemBackground))
                         .cornerRadius(10)
+                        .padding(.horizontal)
                     }
                     .buttonStyle(PlainButtonStyle())
                     
@@ -285,8 +292,9 @@ struct ResultView : View {
                         }
                         .padding(10)
                         .background(Color.pink.opacity(0.1))
-                        .background(Color(.quaternarySystemFill))
+                        .background(Color(.systemBackground))
                         .cornerRadius(10)
+                        .padding(.horizontal)
                     }
                     .buttonStyle(PlainButtonStyle())
                     
@@ -310,8 +318,9 @@ struct ResultView : View {
                             }
                         }
                         .padding(10)
-                        .background(Color(.quaternarySystemFill))
+                        .background(Color(.systemBackground))
                         .cornerRadius(10)
+                        .padding(.horizontal)
                     }
                     .buttonStyle(PlainButtonStyle())
                     
@@ -336,27 +345,25 @@ struct ResultView : View {
                         }
                         .padding(10)
                         .background(Color.black.opacity(0.1))
-                        .background(Color(.quaternarySystemFill))
+                        .background(Color(.systemBackground))
                         .cornerRadius(10)
+                        .padding(.horizontal)
                     }
                     .buttonStyle(PlainButtonStyle())
-                    
                     
                 }
                 
             }
-            
-            Spacer()
+            .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
+            .background(Color(.secondarySystemBackground))
             
         }
-        .padding()
         .sheet(isPresented: $isShowSheet){
             SheetExplansionView(explansion: $sheetExplansion)
         }
         .onAppear {
             
         }
-            
     }
     
     private func transformELintToString(_ input: Int) -> String {

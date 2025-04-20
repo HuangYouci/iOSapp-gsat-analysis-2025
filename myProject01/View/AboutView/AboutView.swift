@@ -22,7 +22,6 @@ struct AboutView: View {
     // State
     @State var searchText: String = ""
     @State private var editingDisplayMore: Bool = false
-    @State private var showDeleteConfirmation: Bool = false
     @State var favoriteDept: [deptListModel] = []
     @State private var rewardAd: RewardedAd?
     @State private var isAdLoaded = false
@@ -61,16 +60,55 @@ struct AboutView: View {
         
         NavigationView {
             
-            VStack{
+            VStack(spacing: 0){
                 
                 HStack{
-                    Text("關於")
-                        .font(.title)
-                        .bold()
-                    Spacer()
+                   Text("關於")
+                       .font(.title)
+                       .bold()
+                   Spacer()
+               }
+               .padding(.horizontal)
+               .padding(.bottom, 10)
+                
+                VStack{
+                    VStack(alignment: .leading){
+                        HStack(alignment: .center){
+                            VStack{
+                                Text("程式版本")
+                                    .font(.caption)
+                                Text("\(LevelConstants.programVersion)")
+                                .font(.title3)
+                                .bold()
+                            }
+                            VStack{
+                                Text("資料版本")
+                                    .font(.caption)
+                                Text("\(databaseInfo.version)")
+                                .font(.title3)
+                                .bold()
+                            }
+                            Spacer()
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 10)
+                    .background(Color(.systemBackground))
+                    .clipShape(
+                        .rect(
+                            topLeadingRadius: 0,
+                            bottomLeadingRadius: 20,
+                            bottomTrailingRadius: 20,
+                            topTrailingRadius: 0
+                        )
+                    )
                 }
+                .background(Color(.secondarySystemBackground))
                 
                 ScrollView {
+                    
+                    Color.clear
+                        .padding(.bottom, 5)
                     
                     HStack{
                         Text("資訊")
@@ -79,7 +117,8 @@ struct AboutView: View {
                             .foregroundColor(.gray)
                         Spacer()
                     }
-                    .padding(5)
+                    .padding(.bottom, 5)
+                    .padding(.horizontal)
                     
                     VStack{
                         HStack{
@@ -110,9 +149,7 @@ struct AboutView: View {
                                 }
                                 .buttonStyle(.borderedProminent)
                             }
-                            .padding(10)
-                            .background(Color(.secondarySystemGroupedBackground).opacity(0.5))
-                            .cornerRadius(10)
+                            .padding(5)
                             
                         }
                         
@@ -159,9 +196,7 @@ struct AboutView: View {
                                 }
                                 
                             }
-                            .padding(10)
-                            .background(Color(.secondarySystemGroupedBackground).opacity(0.5))
-                            .cornerRadius(10)
+                            .padding(5)
                             
                         }
                         
@@ -193,8 +228,9 @@ struct AboutView: View {
                         
                     }
                     .padding(10)
-                    .background(Color(.quaternarySystemFill))
+                    .background(Color(.systemBackground))
                     .cornerRadius(10)
+                    .padding(.horizontal)
                     
                     HStack{
                         Text("功能")
@@ -203,7 +239,8 @@ struct AboutView: View {
                             .foregroundColor(.gray)
                         Spacer()
                     }
-                    .padding(5)
+                    .padding(.bottom, 5)
+                    .padding(.horizontal)
                     
                     VStack {
                         
@@ -257,60 +294,17 @@ struct AboutView: View {
                         
                     }
                     .padding(10)
-                    .background(Color(.quaternarySystemFill))
+                    .background(Color(.systemBackground))
                     .cornerRadius(10)
-                    
-                    
-                    HStack{
-                        Text("重置")
-                            .padding(.vertical, 1)
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                        Spacer()
-                    }
-                    .padding(5)
-                    
-                    VStack{
-                        HStack{
-                            
-                            Button(role: .destructive, action: {
-                                showDeleteConfirmation = true
-                            }, label: {
-                                Spacer()
-                                Text("清除所有資料")
-                                Spacer()
-                            })
-                            .padding(5)
-                            
-                        }
-                    }
-                    .padding(10)
-                    .background(Color(.quaternarySystemFill))
-                    .cornerRadius(10)
+                    .padding(.horizontal)
                     
                     BannerAdView()
                         .frame(height: 80)
                     
-                    Text("\(adLoadMessage)")
-                        .font(.caption)
-                        .foregroundStyle(Color(.systemGray6))
-                    
                 }
+                .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
+                .background(Color(.secondarySystemBackground))
                 
-            }
-            .padding()
-            .confirmationDialog("確定要清除所有資料嗎？", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
-                
-                Button("確認刪除", role: .destructive){
-                    data.resetUserDefaults()
-                    selectedTab = 0
-                }
-                Button("取消", role: .cancel){
-                    // Cancel
-                }
-                
-            } message: {
-                Text("此操作會刪除您的成績資料、分析結果以及最愛科系等。\n清除後將返回主畫面，部分內容需要重新啟動程式才會生效。")
             }
             
         }

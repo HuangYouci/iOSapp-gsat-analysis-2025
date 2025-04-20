@@ -41,9 +41,8 @@ struct DepartmentHeaderView: View {
             Text(department.id)
                 .font(.system(.body, design: .monospaced))
                 .padding(5)
-                .background(Color(.quaternarySystemFill))
+                .background(Color(.secondarySystemBackground))
                 .cornerRadius(10)
         }
-        .padding()
     }
 }

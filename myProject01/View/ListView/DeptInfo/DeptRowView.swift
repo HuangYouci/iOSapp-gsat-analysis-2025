@@ -44,7 +44,7 @@ struct DeptRowView: View {
             }
         }
         .padding(10)
-        .background(Color(.quaternarySystemFill))
+        .background(Color(.systemBackground))
         .cornerRadius(10)
         .contextMenu{
                     

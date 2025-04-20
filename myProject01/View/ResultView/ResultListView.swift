@@ -33,29 +33,48 @@ struct ResultListView: View {
         
         NavigationView {
             
-            VStack {
+            VStack(spacing: 0) {
                 
                 HStack{
-                    Text("所有分析結果")
+                    Text("分析結果")
                         .font(.title)
                         .bold()
                     Spacer()
                 }
+                .padding(.horizontal)
                 .padding(.bottom, 10)
                 
-                HStack{
-                    Image(systemName: "folder")
-                        .opacity(0.5)
-                    
-                    Text("分析資料" + " (共" + data.userResultData.count.description + "個結果)")
-                        .opacity(0.5)
-                    
-                    Spacer()
+                VStack{
+                    VStack(alignment: .leading){
+                        HStack(alignment: .center){
+                            VStack{
+                                Text("分析結果")
+                                    .font(.caption)
+                                Text("\(data.userResultData.count.description)")
+                                .font(.title3)
+                                .bold()
+                            }
+                            Spacer()
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.bottom, 10)
+                    .background(Color(.systemBackground))
+                    .clipShape(
+                        .rect(
+                            topLeadingRadius: 0,
+                            bottomLeadingRadius: 20,
+                            bottomTrailingRadius: 20,
+                            topTrailingRadius: 0
+                        )
+                    )
                 }
-                .padding(.bottom,10)
-                
+                .background(Color(.secondarySystemBackground))
                 
                 ScrollView {
+                    
+                    Color.clear
+                        .padding(.bottom, 5)
                     
                     LazyVStack {
                         
@@ -150,7 +169,7 @@ struct ResultListView: View {
                                 }
                             }
                             .padding(10)
-                            .background(Color(.quaternarySystemFill))
+                            .background(Color(.systemBackground))
                             .cornerRadius(10)
                             .onTapGesture {
                                 if isExpanded {
@@ -160,6 +179,7 @@ struct ResultListView: View {
                                     expandedIndex = index
                                 }
                             }
+                            .padding(.horizontal)
 
                         }
                         
@@ -171,11 +191,13 @@ struct ResultListView: View {
                             .font(.caption)
                     }
                     .padding(.top, 10)
+                    .padding(.horizontal)
                     
                 }
+                .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
+                .background(Color(.secondarySystemBackground))
                 
             }
-            .padding()
             
         }
         .confirmationDialog("確定刪除此筆分析結果？", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {

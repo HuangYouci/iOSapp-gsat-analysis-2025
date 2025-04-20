@@ -22,26 +22,43 @@ struct ChoiceView: View {
     // --------------- //
     
     var body: some View {
-        VStack {
-            HStack {
+        VStack(spacing: 0) {
+            
+            HStack{
                 Text("志願選填")
                     .font(.title)
                     .bold()
                 Spacer()
             }
-            .padding(.bottom, 10)
+            .padding(.horizontal)
+            .padding(.bottom, 5)
             
-            HStack{
-                Image(systemName: "list.number")
-                    .opacity(0.5)
-                Text("填入普大個申六志願")
-                    .opacity(0.5)
-                
-                Spacer()
+            VStack{
+                VStack(alignment: .leading){
+                    HStack(alignment: .center){
+                        Color.clear
+                            .frame(height: 1)
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 10)
+                .background(Color(.systemBackground))
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: 0,
+                        bottomLeadingRadius: 20,
+                        bottomTrailingRadius: 20,
+                        topTrailingRadius: 0
+                    )
+                )
             }
-            .padding(.bottom,10)
+            .background(Color(.secondarySystemBackground))
             
             ScrollView {
+                
+                Color.clear
+                    .padding(.bottom, 5)
+                
                 VStack(spacing: 10){
                     ForEach(choiceList.indices, id: \.self){ index in
                         HStack{
@@ -70,9 +87,11 @@ struct ChoiceView: View {
                         }
                     }
                 }
+                .padding(.horizontal)
             }
+            .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
+            .background(Color(.secondarySystemBackground))
         }
-        .padding()
         .onAppear {
             choiceList = userFavData.choiceDept
         }

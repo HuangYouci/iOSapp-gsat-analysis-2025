@@ -39,7 +39,7 @@ struct DeptListView: View {
     
     var body: some View {
         
-        VStack{
+        VStack(spacing: 0){
             
             HStack{
                 Text(title)
@@ -47,48 +47,82 @@ struct DeptListView: View {
                     .bold()
                 Spacer()
             }
-            .padding(.bottom, 10)
+            .padding(.horizontal)
+            .padding(.bottom, 5)
             
-            HStack{
-                Image(systemName: "list.dash")
-                    .opacity(0.5)
-                
-                if searchText.isEmpty {
-                    Text("校系資料" + " (共" + deptList.count.description + "個校系)")
-                        .opacity(0.5)
-                } else {
-                    Text("搜尋「" + searchText + "」 (已篩選出" + filteredDeptList.count.description + "個校系)")
-                        .lineLimit(2)
-                        .opacity(0.5)
+            VStack{
+                VStack(alignment: .leading){
+                    HStack(alignment: .center){
+                        VStack{
+                            Text("校系資料")
+                                .font(.caption)
+                            Text("\(deptList.count.description)")
+                            .font(.title3)
+                            .bold()
+                        }
+                        if (!searchText.isEmpty) {
+                            VStack{
+                                Text("搜尋詞條")
+                                    .font(.caption)
+                                Text(searchText)
+                                    .font(.title3)
+                                    .bold()
+                                    .lineLimit(1)
+                            }
+                        }
+                        if (filteredDeptList.count != deptList.count){
+                            VStack{
+                                Text("篩選校系")
+                                    .font(.caption)
+                                Text("\(filteredDeptList.count.description)")
+                                    .font(.title3)
+                                    .bold()
+                            }
+                        }
+                        Spacer()
+                    }
+                    HStack{
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(Color(.systemGray))
+                        TextField("搜尋學校或科系", text: $searchText)
+                            .textFieldStyle(PlainTextFieldStyle())
+                    }
+                    .padding(10)
+                    .background(Color(.quaternarySystemFill))
+                    .cornerRadius(10)
                 }
-                
-                Spacer()
+                .padding(.horizontal)
+                .padding(.bottom, 10)
+                .background(Color(.systemBackground))
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: 0,
+                        bottomLeadingRadius: 20,
+                        bottomTrailingRadius: 20,
+                        topTrailingRadius: 0
+                    )
+                )
             }
-            .padding(.bottom,10)
-            
-            HStack{
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(Color(.systemGray))
-                TextField("搜尋學校或科系", text: $searchText)
-                    .textFieldStyle(PlainTextFieldStyle())
-            }
-            .padding(10)
-            .background(Color(.quaternarySystemFill))
-            .cornerRadius(10)
+            .background(Color(.secondarySystemBackground))
             
             ScrollView {
+                
+                Color.clear
+                    .padding(.bottom, 5)
+                
                 LazyVStack {
                     ForEach(filteredDeptList) { dept in
                         NavigationLink(destination: DeptDetailView(department: dept, data: gradeData, displayMore: displayMore)){
                             DeptRowView(department: dept)
+                                .padding(.horizontal)
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
                 }
             }
+            .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
+            .background(Color(.secondarySystemBackground))
             
         }
-        .padding()
-        
     }
 }

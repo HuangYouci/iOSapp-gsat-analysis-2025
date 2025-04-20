@@ -24,13 +24,36 @@ struct DeptDetailView: View {
     
     var body: some View {
         
-        VStack {
+        VStack(spacing: 0) {
             
-            DepartmentHeaderView(department: department)
+            HStack{
+               Spacer()
+           }
+           .padding(.horizontal)
+           .padding(.bottom, 10)
             
-            Divider()
+            VStack{
+                VStack(alignment: .leading){
+                    DepartmentHeaderView(department: department)
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 10)
+                .background(Color(.systemBackground))
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: 0,
+                        bottomLeadingRadius: 20,
+                        bottomTrailingRadius: 20,
+                        topTrailingRadius: 0
+                    )
+                )
+            }
+            .background(Color(.secondarySystemBackground))
             
             ScrollView {
+                
+                Color.clear
+                    .padding(.bottom, 5)
                 
                 if displayMore { PassChanceQuickView(department: department, data: data) } // 需要 data
                 
@@ -49,8 +72,10 @@ struct DeptDetailView: View {
                 if displayMore { PassChanceView(department: department, data: data) } // 需要 data
                 
             }
+            .scrollBounceBehavior(.basedOnSize, axes: [.vertical])
+            .background(Color(.secondarySystemBackground))
+            
         }
-        .padding()
     }
     
 }

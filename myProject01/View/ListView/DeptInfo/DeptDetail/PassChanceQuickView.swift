@@ -150,9 +150,9 @@ struct PassChanceQuickView: View {
             
         }
         .padding()
-        .background(Color(.quaternarySystemFill))
+        .background(Color(.systemBackground))
         .cornerRadius(10)
-        .padding(5)
+        .padding(.horizontal)
             
         
     }
